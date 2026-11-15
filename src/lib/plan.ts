@@ -78,6 +78,8 @@ const FALLBACK: Record<Place, Section[]> = {
   gym: ['gym', 'adapted', 'functional'],
   functional: ['functional', 'adapted', 'home'],
   home: ['home', 'adapted', 'functional'],
+  pilates: ['pilates', 'adapted', 'home'],
+  mma: ['mma', 'home', 'adapted'],
 }
 
 const FOCUS: WeekFocus[] = ['base', 'volume', 'intensity', 'deload']
@@ -115,17 +117,24 @@ export function generatePlan(profile: Profile, month: string, cycle: number): Mo
 
   const safe = (e: Exercise) => e.level <= profile.level && !e.avoid.some((c) => conditions.includes(c))
 
-  /** Safe exercises for a slot: the chosen place's, topped up from the fallbacks while there are fewer than two. */
+  // Gym, functional and home plans top a slot up from the fallbacks for variety. Pilates
+  // and martial arts keep to their own exercises whenever they have one for the slot.
+  const style = profile.place === 'pilates' || profile.place === 'mma'
+  const enough = style ? 1 : 2
+
+  /** Safe exercises for a slot: the chosen place's first, then the fallbacks while there are too few. */
   const candidates = (slot: Slot): Exercise[] => {
     const found: Exercise[] = []
     for (const section of FALLBACK[profile.place]) {
       const own = section === profile.place
-      // At home there is no gym or box equipment: borrow only what needs none.
-      const usable = (e: Exercise) => own || section === 'adapted' || profile.place !== 'home' || e.gear === 'none'
+      // Only gym and functional training have gym or box equipment: the rest borrow
+      // household exercises freely, and from elsewhere only what needs no equipment.
+      const equipped = profile.place === 'gym' || profile.place === 'functional'
+      const usable = (e: Exercise) => own || equipped || section === 'adapted' || section === 'home' || e.gear === 'none'
       for (const e of EXERCISES) {
         if (e.slot === slot && e.sections.includes(section) && safe(e) && usable(e) && !found.includes(e)) found.push(e)
       }
-      if (found.length >= 2) break
+      if (found.length >= enough) break
     }
     // Prefer exercises near the person's level when that still leaves a choice.
     const near = found.filter((e) => e.level >= profile.level - 1)
@@ -145,7 +154,11 @@ export function generatePlan(profile: Profile, month: string, cycle: number): Mo
     const slots = [...SLOTS[kind]]
     // Full-body days alternate the single-leg slot with overhead work.
     if (kind === 'full' && day % 2 === 1) slots[4] = 'overhead'
-    if (profile.goal === 'lose' || (profile.goal === 'maintain' && kind !== 'upper' && kind !== 'push' && kind !== 'pull')) {
+    // A Pilates session is core-centred and closes with a stretch.
+    if (profile.place === 'pilates') slots.push('core', 'mobility')
+    // Martial arts always end with a technique round: its striking drills are the cardio.
+    const lowerDay = kind !== 'upper' && kind !== 'push' && kind !== 'pull'
+    if (profile.place === 'mma' || profile.goal === 'lose' || (profile.goal === 'maintain' && lowerDay)) {
       slots.push('cardio')
     }
 

@@ -3,7 +3,7 @@ import { LevelDots } from '../components/ExerciseCard'
 import { exerciseById } from '../data/exercises'
 import { Figure } from '../figure/Figure'
 import { POSES } from '../figure/poses'
-import { LEVEL_KEY, MUSCLE_KEY, SECTION_KEY } from '../i18n/labels'
+import { DISCIPLINE_KEY, LEVEL_KEY, MUSCLE_KEY, SECTION_KEY } from '../i18n/labels'
 import { useI18n } from '../i18n/useI18n'
 import { tipsFor, type Tip } from '../lib/personalize'
 import { href } from '../router'
@@ -76,6 +76,7 @@ export function ExerciseDetail({ id }: { id?: string }) {
             {t(SECTION_KEY[s])}
           </span>
         ))}
+        {exercise.discipline && <span className="tag">{t(DISCIPLINE_KEY[exercise.discipline])}</span>}
         <span className="tag">{t(MUSCLE_KEY[exercise.muscle])}</span>
         <span className="tag">
           <LevelDots level={exercise.level} /> {t(LEVEL_KEY[exercise.level])}

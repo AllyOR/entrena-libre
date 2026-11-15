@@ -4,6 +4,7 @@ import { exerciseById } from '../data/exercises'
 import { Figure } from '../figure/Figure'
 import { KIND_KEY } from '../i18n/labels'
 import { useI18n } from '../i18n/useI18n'
+import { buzz } from '../lib/native'
 import { tipsFor } from '../lib/personalize'
 import type { PlanItem } from '../lib/plan'
 import { href } from '../router'
@@ -28,7 +29,7 @@ function useCountdown(seconds: number, onEnd: () => void): number {
       setLeft(remaining)
       if (remaining === 0) {
         window.clearInterval(id)
-        navigator.vibrate?.(200)
+        void buzz()
         end.current()
       }
     }, 250)

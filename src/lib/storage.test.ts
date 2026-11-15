@@ -55,6 +55,13 @@ describe('parseState', () => {
     expect(parsed?.measurements).toEqual([{ date: '2026-11-01', weightKg: 64, waistCm: undefined }])
   })
 
+  it('keeps the reminders setting, and defaults it for data saved before it existed', () => {
+    const reminders = { enabled: true, time: '07:30', days: [1, 4] }
+    expect(parseState(JSON.stringify({ ...saved, reminders }), fallback)?.reminders).toEqual(reminders)
+    const { reminders: _dropped, ...older } = saved
+    expect(parseState(JSON.stringify(older), fallback)?.reminders).toEqual({ enabled: false, time: '18:00', days: [1, 3, 5] })
+  })
+
   it('returns null for anything that is not this app’s data', () => {
     expect(parseState(null, fallback)).toBeNull()
     expect(parseState('not json', fallback)).toBeNull()

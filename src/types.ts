@@ -4,8 +4,11 @@ export type Lang = 'es' | 'en'
 export type L10n = Record<Lang, string>
 export type L10nList = Record<Lang, string[]>
 
-/** The four exercise sections of the app. */
-export type Section = 'gym' | 'functional' | 'home' | 'adapted'
+/** The exercise sections of the app. */
+export type Section = 'gym' | 'functional' | 'home' | 'adapted' | 'pilates' | 'mma'
+
+/** The martial arts grouped in the `mma` section. */
+export type Discipline = 'kickboxing' | 'jiujitsu' | 'taekwondo' | 'karate'
 
 export type Muscle =
   | 'legs'
@@ -107,15 +110,37 @@ export const POSE_IDS = [
   'seated',
   'pendulum',
   'singleLegStand',
+  'hundred',
+  'rollUp',
+  'singleLegStretch',
+  'doubleLegStretch',
+  'legCircle',
+  'swimming',
+  'cobra',
+  'teaser',
+  'plankLegLift',
+  'guardPunch',
+  'frontKick',
+  'roundKick',
+  'kneeStrike',
+  'weave',
+  'stancePunch',
+  'lungePunch',
+  'risingBlock',
+  'technicalStandUp',
+  'shrimp',
+  'sprawl',
 ] as const
 
 export type PoseId = (typeof POSE_IDS)[number]
 
 export interface Exercise {
-  /** Unique, kebab-case, prefixed by its file: `gym-`, `fun-`, `home-`, `ada-`. */
+  /** Unique, kebab-case, prefixed by its file: `gym-`, `fun-`, `home-`, `ada-`, `pil-`, `mma-`. */
   id: string
   /** Sections whose library lists it. */
   sections: Section[]
+  /** The martial art it belongs to. Set on every `mma` exercise, and only there. */
+  discipline?: Discipline
   muscle: Muscle
   slot: Slot
   level: Level
@@ -146,7 +171,8 @@ export interface Exercise {
 export type Sex = 'female' | 'male'
 export type Goal = 'lose' | 'maintain' | 'gain'
 export type Activity = 'sedentary' | 'light' | 'moderate' | 'active' | 'athlete'
-export type Place = 'gym' | 'functional' | 'home'
+/** Where, or in which style, the person trains: it picks the plan's exercises. */
+export type Place = 'gym' | 'functional' | 'home' | 'pilates' | 'mma'
 
 export interface Profile {
   name: string

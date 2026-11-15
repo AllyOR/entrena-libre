@@ -7,7 +7,9 @@ import { exerciseById } from '../data/exercises'
 import { CONDITIONS } from '../data/conditions'
 import type { Activity, ConditionId, Goal, Lang, Level, Place, Profile, Sex } from '../types'
 import type { MonthPlan, PlanItem, Session, Week } from './plan'
+import { DEFAULT_REMINDERS, parseReminders, type Reminders } from './reminders'
 
+/** Kept from the app's first name, so data saved before the rename is still found. */
 export const STORAGE_KEY = 'entrena-libre:v1'
 
 export type Theme = 'light' | 'dark'
@@ -28,6 +30,8 @@ export interface AppState {
   plans: Record<string, MonthPlan>
   /** Oldest first, one per date. */
   measurements: Measurement[]
+  /** Workout reminders. Only the Android and iOS apps can deliver them. */
+  reminders: Reminders
 }
 
 export const LIMITS = {
@@ -49,7 +53,7 @@ const optional = (v: unknown, range: readonly [number, number]) => (inRange(v, r
 const SEXES: Sex[] = ['female', 'male']
 const GOALS: Goal[] = ['lose', 'maintain', 'gain']
 const ACTIVITIES: Activity[] = ['sedentary', 'light', 'moderate', 'active', 'athlete']
-const PLACES: Place[] = ['gym', 'functional', 'home']
+const PLACES: Place[] = ['gym', 'functional', 'home', 'pilates', 'mma']
 const LEVELS: Level[] = [1, 2, 3]
 const CONDITION_IDS = CONDITIONS.filter((c) => !c.derived).map((c) => c.id)
 
@@ -134,7 +138,7 @@ function parseMeasurements(v: unknown): Measurement[] {
 }
 
 export function defaultState(lang: Lang, theme: Theme): AppState {
-  return { v: 1, lang, theme, profile: null, plans: {}, measurements: [] }
+  return { v: 1, lang, theme, profile: null, plans: {}, measurements: [], reminders: DEFAULT_REMINDERS }
 }
 
 /** Reads saved or imported JSON. Returns null when it is not this app's data at all. */
@@ -161,6 +165,7 @@ export function parseState(raw: string | null, fallback: AppState): AppState | n
     profile: parseProfile(data.profile),
     plans,
     measurements: parseMeasurements(data.measurements),
+    reminders: parseReminders(data.reminders),
   }
 }
 

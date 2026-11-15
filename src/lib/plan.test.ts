@@ -47,7 +47,7 @@ describe('generatePlan', () => {
   })
 
   it('never repeats an exercise inside a session', () => {
-    for (const place of ['gym', 'functional', 'home'] as Place[]) {
+    for (const place of ['gym', 'functional', 'home', 'pilates', 'mma'] as Place[]) {
       for (const days of [2, 4, 6]) {
         const plan = generatePlan({ ...base, place, daysPerWeek: days }, '2026-11', 0)
         for (const session of plan.weeks.flatMap((w) => w.sessions)) {
@@ -69,6 +69,27 @@ describe('generatePlan', () => {
     }
   })
 
+  it('builds Pilates and martial-arts plans mostly from their own section', () => {
+    for (const place of ['pilates', 'mma'] as Place[]) {
+      for (const level of [1, 2, 3] as const) {
+        const plan = generatePlan({ ...base, place, level }, '2026-11', 0)
+        for (const session of plan.weeks.flatMap((w) => w.sessions)) {
+          const own = session.items.filter((i) => exerciseById(i.exerciseId)?.sections.includes(place)).length
+          expect(own, `${place} level ${level} ${session.id}`).toBeGreaterThanOrEqual(3)
+        }
+      }
+    }
+  })
+
+  it('ends every martial-arts session with a technique round, whatever the goal', () => {
+    const plan = generatePlan({ ...base, place: 'mma', goal: 'gain' }, '2026-11', 0)
+    for (const session of plan.weeks.flatMap((w) => w.sessions)) {
+      const last = exerciseById(session.items[session.items.length - 1].exerciseId)
+      expect(last?.slot).toBe('cardio')
+      expect(last?.sections).toContain('mma')
+    }
+  })
+
   it('stays at or below the profile level', () => {
     const plan = generatePlan({ ...base, level: 1, place: 'functional' }, '2026-11', 0)
     for (const e of exercisesOf(plan)) expect(e.level).toBe(1)
@@ -83,7 +104,7 @@ describe('generatePlan', () => {
       ['knee', 'lowerBack', 'shoulder', 'wrist', 'heart', 'osteoporosis'],
     ]
     for (const conditions of sets) {
-      for (const place of ['gym', 'functional', 'home'] as Place[]) {
+      for (const place of ['gym', 'functional', 'home', 'pilates', 'mma'] as Place[]) {
         const plan = generatePlan({ ...base, place, conditions }, '2026-11', 0)
         for (const e of exercisesOf(plan)) {
           expect(e.avoid.filter((c) => conditions.includes(c)), `${e.id} for ${conditions.join()}`).toEqual([])

@@ -2,22 +2,32 @@
 import type { DishTag, MealType } from '../data/meals'
 import type { BmiCategory } from '../lib/nutrition'
 import type { SessionKind, WeekFocus } from '../lib/plan'
-import type { Activity, Goal, Level, Muscle, Section } from '../types'
+import type { Activity, Discipline, Goal, Level, Muscle, Section } from '../types'
 import type { MessageKey } from './es'
 
-export const SECTIONS: Section[] = ['gym', 'functional', 'home', 'adapted']
+export const SECTIONS: Section[] = ['gym', 'functional', 'home', 'pilates', 'mma', 'adapted']
 
 export const SECTION_KEY: Record<Section, MessageKey> = {
   gym: 'secGym',
   functional: 'secFunctional',
   home: 'secHome',
   adapted: 'secAdapted',
+  pilates: 'secPilates',
+  mma: 'secMma',
 }
 export const SECTION_DESC_KEY: Record<Section, MessageKey> = {
   gym: 'secGymDesc',
   functional: 'secFunctionalDesc',
   home: 'secHomeDesc',
   adapted: 'secAdaptedDesc',
+  pilates: 'secPilatesDesc',
+  mma: 'secMmaDesc',
+}
+export const DISCIPLINE_KEY: Record<Discipline, MessageKey> = {
+  kickboxing: 'dKickboxing',
+  jiujitsu: 'dJiujitsu',
+  taekwondo: 'dTaekwondo',
+  karate: 'dKarate',
 }
 export const MUSCLE_KEY: Record<Muscle, MessageKey> = {
   legs: 'mLegs',

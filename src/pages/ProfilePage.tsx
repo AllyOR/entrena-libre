@@ -1,11 +1,12 @@
 import { useRef, useState, type ChangeEvent, type FormEvent } from 'react'
+import { RemindersCard } from '../components/RemindersCard'
 import { SELECTABLE_CONDITIONS } from '../data/conditions'
 import type { MessageKey } from '../i18n/es'
 import { ACTIVITY_KEY, GOAL_KEY, LEVEL_KEY, SECTION_KEY } from '../i18n/labels'
 import { useI18n } from '../i18n/useI18n'
 import { isoDate } from '../lib/dates'
 import { LIMITS, parseProfile, parseState } from '../lib/storage'
-import { navigate } from '../router'
+import { href, navigate } from '../router'
 import { useStore } from '../state/store'
 import type { Activity, ConditionId, Goal, Level, Place, Sex } from '../types'
 
@@ -30,7 +31,7 @@ interface Draft {
 const ACTIVITIES: Activity[] = ['sedentary', 'light', 'moderate', 'active', 'athlete']
 const GOALS: Goal[] = ['lose', 'maintain', 'gain']
 const LEVELS: Level[] = [1, 2, 3]
-const PLACES: Place[] = ['gym', 'functional', 'home']
+const PLACES: Place[] = ['gym', 'functional', 'home', 'pilates', 'mma']
 const DAYS = [2, 3, 4, 5, 6]
 
 type NumberField = 'age' | 'heightCm' | 'weightKg' | 'waistCm' | 'neckCm' | 'hipCm'
@@ -90,7 +91,7 @@ export function ProfilePage() {
     const url = URL.createObjectURL(new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' }))
     const link = document.createElement('a')
     link.href = url
-    link.download = `entrena-libre-${isoDate()}.json`
+    link.download = `training-seasonny-${isoDate()}.json`
     link.click()
     URL.revokeObjectURL(url)
   }
@@ -225,6 +226,8 @@ export function ProfilePage() {
         </div>
       </form>
 
+      <RemindersCard />
+
       <section className="card">
         <h2>{t('dataTitle')}</h2>
         <p>{t('dataText')}</p>
@@ -250,7 +253,9 @@ export function ProfilePage() {
           </button>
         </div>
       </section>
-      <p className="note muted small">{t('disclaimer')}</p>
+      <p className="note muted small">
+        {t('disclaimer')} <a href={href('privacy')}>{t('privacyLink')}</a>
+      </p>
     </>
   )
 }

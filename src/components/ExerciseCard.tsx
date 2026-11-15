@@ -1,5 +1,5 @@
 import { Figure } from '../figure/Figure'
-import { LEVEL_KEY, MUSCLE_KEY } from '../i18n/labels'
+import { DISCIPLINE_KEY, LEVEL_KEY, MUSCLE_KEY } from '../i18n/labels'
 import { useI18n } from '../i18n/useI18n'
 import { statusFor, type Status } from '../lib/personalize'
 import { href } from '../router'
@@ -37,7 +37,7 @@ export function ExerciseCard({ exercise }: { exercise: Exercise }) {
       <span className="ex-card-body">
         <span className="ex-card-name">{l(exercise.name)}</span>
         <span className="ex-card-meta">
-          {t(MUSCLE_KEY[exercise.muscle])} · {l(exercise.equipment)}
+          {t(exercise.discipline ? DISCIPLINE_KEY[exercise.discipline] : MUSCLE_KEY[exercise.muscle])} · {l(exercise.equipment)}
         </span>
         <span className="ex-card-foot">
           <LevelDots level={exercise.level} />

@@ -129,6 +129,15 @@ const SUPINE_KNEES_UP: Angles = [150, 30]
 
 const squatDown = (armA: Limb): Frame => ({ anchor: ['ftA', 58, 92], torso: 150, armA, legA: [80, -25] })
 const standing = (armA: Limb, x = 58): Frame => ({ anchor: ['ftA', x, 92], torso: 180, armA, legA: [0, 0] })
+/** Fighting stance: feet staggered, hands at the chin. `armA` is the lead arm. */
+const guard = (armA: Limb): Frame => ({
+  anchor: ['ftA', 62, 92],
+  torso: 178,
+  armA,
+  armB: [20, 155],
+  legA: [15, 5],
+  legB: [-15, -25],
+})
 const pushupTop: Frame = {
   anchor: ['ftA', 20, 90],
   torso: 110,
@@ -421,5 +430,92 @@ export const POSES: Record<PoseId, PoseDef> = {
   singleLegStand: {
     a: { anchor: ['ftA', 60, 92], torso: 180, armA: [20, 30], legA: [0, 0] },
     b: { anchor: ['ftA', 60, 92], torso: 180, armA: [25, 40], legA: [0, 0], legB: [70, -10] },
+  },
+  hundred: {
+    a: { anchor: ['hip', 58, 86], torso: -112, armA: [88, 88], legA: [125, 125] },
+    b: { anchor: ['hip', 58, 86], torso: -112, armA: [99, 99], legA: [125, 125] },
+  },
+  rollUp: {
+    a: { anchor: ['hip', 62, 87], torso: -90, armA: [-90, -90], legA: [90, 90] },
+    b: { anchor: ['hip', 62, 87], torso: 135, armA: [95, 100], legA: [90, 90] },
+  },
+  singleLegStretch: {
+    a: { anchor: ['hip', 58, 86], torso: -112, armA: [70, 80], legA: [-170, 90], legB: [118, 118] },
+    b: { anchor: ['hip', 58, 86], torso: -112, armA: [70, 80], legA: [118, 118], legB: [-170, 90] },
+  },
+  doubleLegStretch: {
+    a: { anchor: ['hip', 58, 86], torso: -112, armA: [60, 85], legA: [-170, 90] },
+    b: { anchor: ['hip', 58, 86], torso: -112, armA: [-140, -140], legA: [125, 125] },
+  },
+  legCircle: {
+    a: { anchor: ['hip', 56, 86], torso: -90, armA: [90, 90], legA: [160, 160], legB: [92, 92] },
+    b: { anchor: ['hip', 56, 86], torso: -90, armA: [90, 90], legA: [192, 192], legB: [92, 92] },
+  },
+  swimming: {
+    a: { anchor: ['hip', 60, 87], torso: -100, armA: [-118, -118], armB: [-98, -98], legA: [96, 96], legB: [110, 110] },
+    b: { anchor: ['hip', 60, 87], torso: -100, armA: [-98, -98], armB: [-118, -118], legA: [110, 110], legB: [96, 96] },
+  },
+  cobra: {
+    a: { anchor: ['ftA', 20, 90], torso: 93, armA: { to: [78, 92], bend: 1 }, legA: [-88, -88] },
+    b: { anchor: ['ftA', 20, 90], torso: 135, armA: { to: [84, 92], bend: 1 }, legA: [-86, -86] },
+  },
+  teaser: {
+    a: { anchor: ['hip', 60, 87], torso: -90, armA: [-90, -90], legA: [90, 90] },
+    b: { anchor: ['hip', 60, 87], torso: 222, armA: [118, 118], legA: [132, 132] },
+  },
+  plankLegLift: {
+    a: pushupTop,
+    b: { ...pushupTop, legB: [-96, -96] },
+  },
+  guardPunch: {
+    a: guard([30, 150]),
+    b: { ...guard([88, 90]), torso: 174 },
+  },
+  frontKick: {
+    a: { anchor: ['ftB', 50, 92], torso: 180, armA: [30, 150], legA: [15, 5], legB: [0, 0] },
+    b: { anchor: ['ftB', 50, 92], torso: 196, armA: [30, 150], legA: [92, 88], legB: [0, 0] },
+  },
+  roundKick: {
+    a: { anchor: ['ftB', 44, 92], torso: 180, armA: [30, 150], armB: [20, 155], legA: [15, 5], legB: [0, 0] },
+    b: { anchor: ['ftB', 44, 92], torso: 212, armA: [-40, -10], armB: [20, 155], legA: [112, 104], legB: [6, -6] },
+  },
+  kneeStrike: {
+    a: { anchor: ['ftB', 56, 92], torso: 180, armA: [120, 150], legA: [-12, -30], legB: [0, 0] },
+    b: { anchor: ['ftB', 56, 92], torso: 172, armA: [55, 100], legA: [105, 5], legB: [0, 0] },
+  },
+  weave: {
+    a: guard([30, 150]),
+    b: { anchor: ['ftA', 62, 92], torso: 162, armA: [35, 150], legA: [50, -18], legB: [12, -48] },
+  },
+  stancePunch: {
+    a: { anchor: ['ftA', 58, 92], torso: 180, armA: [-40, 80], armB: [88, 90], legA: [55, -20] },
+    b: { anchor: ['ftA', 58, 92], torso: 180, armA: [88, 90], armB: [-40, 80], legA: [55, -20] },
+  },
+  lungePunch: {
+    a: { anchor: ['ftA', 76, 92], torso: 180, armA: [-40, 80], armB: [88, 90], legA: [50, -5], legB: [-35, -35] },
+    b: { anchor: ['ftA', 76, 92], torso: 180, armA: [88, 90], armB: [-40, 80], legA: [50, -5], legB: [-35, -35] },
+  },
+  risingBlock: {
+    a: { anchor: ['ftA', 76, 92], torso: 180, armA: [-40, 80], legA: [50, -5], legB: [-35, -35] },
+    b: { anchor: ['ftA', 76, 92], torso: 180, armA: [120, 215], armB: [-40, 80], legA: [50, -5], legB: [-35, -35] },
+  },
+  technicalStandUp: {
+    a: {
+      anchor: ['hip', 50, 88],
+      torso: 200,
+      armA: [60, 150],
+      armB: { to: [28, 91], bend: -1 },
+      legA: { to: [72, 91], bend: -1 },
+      legB: [86, 94],
+    },
+    b: { anchor: ['hip', 56, 51], torso: 178, armA: [30, 150], armB: [20, 155], legA: [15, 5], legB: [-15, -25] },
+  },
+  shrimp: {
+    a: { anchor: ['hip', 66, 86], torso: -90, armA: [170, 100], legA: SUPINE_KNEES_UP },
+    b: { anchor: ['hip', 54, 84], torso: -112, armA: [80, 85], legA: [95, 92] },
+  },
+  sprawl: {
+    a: { anchor: ['ftA', 44, 92], torso: 178, armA: [30, 150], legA: [15, 5], legB: [-15, -25] },
+    b: { anchor: ['ftA', 20, 90], torso: 135, armA: { to: [84, 92], bend: 1 }, legA: [-86, -86] },
   },
 }

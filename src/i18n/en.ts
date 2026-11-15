@@ -2,7 +2,8 @@ import type { Messages } from './es'
 
 /** English interface strings. The `Messages` type makes a missing key a compile error. */
 export const en: Messages = {
-  appName: 'EntrenaLibre',
+  appName: 'Training Seasonny',
+  appShort: 'Seasonny',
   skip: 'Skip to content',
   navHome: 'Today',
   navExercises: 'Exercises',
@@ -24,10 +25,20 @@ export const en: Messages = {
   secFunctional: 'Functional',
   secHome: 'At home',
   secAdapted: 'Adapted',
+  secPilates: 'Pilates',
+  secMma: 'Martial arts',
   secGymDesc: 'Barbells, dumbbells, machines and cables.',
   secFunctionalDesc: 'Bodyweight, kettlebells, jumps and circuits.',
   secHomeDesc: 'With a backpack, bottles, a chair and a wall.',
   secAdaptedDesc: 'For your health, your joints and your life stage.',
+  secPilatesDesc: 'Control, core and posture on the mat.',
+  secMmaDesc: 'Solo technique from kickboxing, jiu-jitsu, taekwondo and karate.',
+  mmaNote:
+    'Practise slowly, with no contact and clear space around you. To spar or train with a partner you need an instructor.',
+  dKickboxing: 'Kickboxing',
+  dJiujitsu: 'Jiu-jitsu',
+  dTaekwondo: 'Taekwondo',
+  dKarate: 'Karate',
 
   mAll: 'All',
   mLegs: 'Legs',
@@ -234,7 +245,7 @@ export const en: Messages = {
   actAthlete: 'Very high: hard training every day',
   training: 'Training',
   goal: 'Goal',
-  place: 'Where you train',
+  place: 'Training type',
   daysPerWeek: 'Days per week',
   health: 'Health and limitations',
   healthHint: 'Tick what applies to you. It is used only to adapt the exercises.',
@@ -247,7 +258,40 @@ export const en: Messages = {
   exportData: 'Download backup',
   importData: 'Restore backup',
   importOk: 'Backup restored.',
-  importBad: 'The file is not a valid EntrenaLibre backup.',
+  importBad: 'The file is not a valid Training Seasonny backup.',
   resetData: 'Delete everything',
   resetConfirm: 'Your profile, plans and measurements will be deleted from this device. Continue?',
+
+  remindersTitle: 'Workout reminders',
+  remindersText: 'Get a notification on your phone on the days you choose to train.',
+  remindersEnable: 'Turn on reminders',
+  remindersTime: 'Time',
+  remindersDays: 'Days',
+  remindersOn: 'Reminders scheduled.',
+  remindersOff: 'Reminders turned off.',
+  remindersDenied: 'Notifications are blocked. Allow them for this app in your phone settings.',
+  remindersAppOnly: 'Reminders work in the Android and iOS app, not in the browser.',
+  reminderNotice: 'Training day',
+  reminderBody: 'Your session is waiting. A few minutes today count.',
+
+  privacyTitle: 'Privacy policy',
+  privacyLink: 'Privacy policy',
+  privacyUpdated: 'Last updated: Nov 15, 2026.',
+  privacyStoredTitle: 'What the app stores',
+  privacyStored:
+    'Your profile (optional name, sex, age, height, weight, measurements, goal and the health conditions you tick), your plans, completed sessions, weight log, and your language, theme and reminder preferences.',
+  privacyWhereTitle: 'Where it is stored',
+  privacyWhere:
+    'Only on your device, in the local storage of the app or the browser. The app has no accounts and no server: it does not send, collect, sell or share your data with anyone, and it uses no analytics or advertising.',
+  privacyPermissionsTitle: 'Permissions',
+  privacyPermissions:
+    'The Android and iOS app asks for notification permission only if you turn on reminders. They are scheduled on your phone; nothing is sent from a server.',
+  privacyControlTitle: 'Your control',
+  privacyControl:
+    'In Profile → Your data you can download a backup, restore it or delete everything. Uninstalling the app or clearing the site data also removes it.',
+  privacyHealthTitle: 'Health',
+  privacyHealth:
+    'Health information is used only to adapt the exercises on your device. The app gives general guidance and does not replace a health professional.',
+  privacyContactTitle: 'Contact',
+  privacyContact: 'Privacy questions or requests:',
 }

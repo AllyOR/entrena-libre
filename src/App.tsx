@@ -6,6 +6,7 @@ import { Home } from './pages/Home'
 import { Library } from './pages/Library'
 import { Nutrition } from './pages/Nutrition'
 import { PlanPage } from './pages/PlanPage'
+import { Privacy } from './pages/Privacy'
 import { ProfilePage } from './pages/ProfilePage'
 import { Progress } from './pages/Progress'
 import { Workout } from './pages/Workout'
@@ -43,6 +44,8 @@ function Page({ route }: { route: string[] }) {
       return <Progress />
     case 'profile':
       return <ProfilePage />
+    case 'privacy':
+      return <Privacy />
     default:
       return <Home />
   }
@@ -62,12 +65,17 @@ export function App() {
       </a>
 
       <header className="topbar">
-        <a className="brand" href={href()}>
+        <a className="brand" href={href()} aria-label={t('appName')}>
           <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true">
             <rect width="32" height="32" rx="8" className="brand-bg" />
             <path d="M6 16h20M9 11v10M23 11v10M5 13.5v5M27 13.5v5" className="brand-mark" />
           </svg>
-          <span>{t('appName')}</span>
+          <span className="brand-name brand-long" aria-hidden="true">
+            {t('appName')}
+          </span>
+          <span className="brand-name brand-short" aria-hidden="true">
+            {t('appShort')}
+          </span>
         </a>
         <div className="topbar-actions">
           <div className="lang-switch" role="group" aria-label={t('language')}>
