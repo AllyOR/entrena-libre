@@ -9,7 +9,7 @@ describe('exercise catalogue', () => {
   it('has unique ids with the section prefix', () => {
     const ids = EXERCISES.map((e) => e.id)
     expect(new Set(ids).size).toBe(ids.length)
-    for (const id of ids) expect(id).toMatch(/^(gym|fun|home|ada|pil|mma)-[a-z0-9-]+$/)
+    for (const id of ids) expect(id).toMatch(/^(gym|fun|home|ada|pil|mma|str)-[a-z0-9-]+$/)
   })
 
   it.each(EXERCISES.map((e) => [e.id, e] as const))('%s is complete in both languages', (_id, e) => {
@@ -56,6 +56,25 @@ describe('exercise catalogue', () => {
       expect(exercisesIn('mma').filter((e) => e.discipline === art).length, art).toBeGreaterThanOrEqual(4)
     }
     expect(exercisesIn('pilates').length).toBeGreaterThanOrEqual(15)
+  })
+
+  it('has calf exercises in the gym, functional and home sections, in the calves slot', () => {
+    for (const section of ['gym', 'functional', 'home'] as const) {
+      const calves = exercisesIn(section).filter((e) => e.muscle === 'calves')
+      expect(calves.length, section).toBeGreaterThanOrEqual(2)
+      for (const e of calves) expect(e.slot, e.id).toBe('calves')
+    }
+  })
+
+  it('has a held, low-impact stretch for every muscle group', () => {
+    const stretches = exercisesIn('stretch')
+    const groups = ['legs', 'hamstrings', 'glutes', 'calves', 'chest', 'back', 'shoulders', 'biceps', 'triceps', 'forearms', 'core'] as const
+    for (const muscle of groups) {
+      expect(stretches.some((e) => e.muscle === muscle), muscle).toBe(true)
+    }
+    for (const e of stretches) {
+      expect([e.slot, e.unit, e.impact, e.gear], e.id).toEqual(['mobility', 'secs', 'low', 'none'])
+    }
   })
 
   it('has an adapted exercise that helps each condition', () => {

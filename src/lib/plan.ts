@@ -64,10 +64,10 @@ const SPLITS: Record<number, SessionKind[]> = {
 const SLOTS: Record<SessionKind, Slot[]> = {
   full: ['squat', 'push', 'hinge', 'pull', 'lunge', 'core'],
   upper: ['push', 'pull', 'overhead', 'pull', 'arms', 'core'],
-  lower: ['squat', 'hinge', 'lunge', 'squat', 'core'],
+  lower: ['squat', 'hinge', 'lunge', 'squat', 'calves', 'core'],
   push: ['push', 'overhead', 'push', 'arms', 'core'],
   pull: ['pull', 'hinge', 'pull', 'arms', 'core'],
-  legs: ['squat', 'hinge', 'lunge', 'squat', 'core'],
+  legs: ['squat', 'hinge', 'lunge', 'squat', 'calves', 'core'],
 }
 
 /**
@@ -154,6 +154,8 @@ export function generatePlan(profile: Profile, month: string, cycle: number): Mo
     const slots = [...SLOTS[kind]]
     // Full-body days alternate the single-leg slot with overhead work.
     if (kind === 'full' && day % 2 === 1) slots[4] = 'overhead'
+    // The other full-body days train the calves, before the core.
+    else if (kind === 'full') slots.splice(5, 0, 'calves')
     // A Pilates session is core-centred and closes with a stretch.
     if (profile.place === 'pilates') slots.push('core', 'mobility')
     // Martial arts always end with a technique round: its striking drills are the cardio.

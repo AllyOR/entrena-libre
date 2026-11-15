@@ -90,6 +90,28 @@ describe('generatePlan', () => {
     }
   })
 
+  it('trains the calves on leg days, with a safe option for every profile', () => {
+    for (const place of ['gym', 'functional', 'home', 'pilates', 'mma'] as Place[]) {
+      for (const conditions of [[], ['knee', 'ankle']] as ConditionId[][]) {
+        const plan = generatePlan({ ...base, place, daysPerWeek: 4, conditions }, '2026-11', 0)
+        for (const session of plan.weeks.flatMap((w) => w.sessions).filter((s) => s.kind === 'lower')) {
+          const slots = session.items.map((i) => exerciseById(i.exerciseId)?.slot)
+          expect(slots, `${place} ${session.id}`).toContain('calves')
+        }
+      }
+    }
+    const fullBody = generatePlan({ ...base, daysPerWeek: 3 }, '2026-11', 0).weeks[0].sessions
+    const withCalves = fullBody.map((s) => s.items.some((i) => exerciseById(i.exerciseId)?.slot === 'calves'))
+    expect(withCalves).toEqual([true, false, true])
+  })
+
+  it('never puts a stretch from the stretching section in a workout', () => {
+    for (const place of ['gym', 'home', 'pilates'] as Place[]) {
+      const plan = generatePlan({ ...base, place, goal: 'lose' }, '2026-11', 0)
+      for (const e of exercisesOf(plan)) expect(e.sections, e.id).not.toContain('stretch')
+    }
+  })
+
   it('stays at or below the profile level', () => {
     const plan = generatePlan({ ...base, level: 1, place: 'functional' }, '2026-11', 0)
     for (const e of exercisesOf(plan)) expect(e.level).toBe(1)

@@ -499,6 +499,7 @@ fieldset.card > legend {
 }
 
 .tabs {
+  position: relative;
   display: flex;
   gap: 4px;
   margin-bottom: 12px;

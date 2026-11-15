@@ -5,6 +5,7 @@ import { gymExercises } from './gym'
 import { homeExercises } from './home'
 import { mmaExercises } from './mma'
 import { pilatesExercises } from './pilates'
+import { stretchExercises } from './stretch'
 
 export const EXERCISES: readonly Exercise[] = [
   ...gymExercises,
@@ -12,6 +13,7 @@ export const EXERCISES: readonly Exercise[] = [
   ...homeExercises,
   ...pilatesExercises,
   ...mmaExercises,
+  ...stretchExercises,
   ...adaptedExercises,
 ]
 

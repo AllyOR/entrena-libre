@@ -13,16 +13,20 @@ Web: https://allyor.github.io/entrena-libre/
 
 | Sección | Contenido |
 |---|---|
-| **Gimnasio** | 28 ejercicios con barra, mancuernas, pesa rusa, máquinas y poleas. |
-| **Funcional** | 27 ejercicios de peso corporal, pesa rusa, saltos y circuitos. |
-| **En casa** | 29 ejercicios con mochila, botellas, silla, pared y toalla. |
+| **Gimnasio** | 34 ejercicios con barra, mancuernas, pesa rusa, máquinas y poleas. |
+| **Funcional** | 31 ejercicios de peso corporal, pesa rusa, saltos y circuitos. |
+| **En casa** | 34 ejercicios con mochila, botellas, silla, pared y toalla. |
 | **Pilates** | 16 ejercicios de colchoneta: el cien, roll-up, puente de hombros, natación, teaser… |
 | **Artes marciales** | 20 técnicas en solitario de kickboxing, jiu-jitsu, taekwondo y karate. |
+| **Estiramientos** | 17 estiramientos, uno o dos por grupo muscular, para después de entrenar. |
 | **Adaptado** | 15 condiciones (rodilla, lumbar, hombro, hipertensión, diabetes, embarazo…): qué hacer, qué evitar y 19 ejercicios suaves recomendados. |
 | **Cuerpo y nutrición** | IMC, peso saludable, metabolismo basal, gasto diario, objetivo de calorías, macros, agua, grasa corporal y un menú diario con platos y porciones. |
 | **Plan mensual** | Cuatro semanas (base, volumen, intensidad, descarga) para gimnasio, funcional, casa, Pilates o artes marciales, con ejercicios que cambian a mitad de mes y de un mes a otro. |
 | **Sesión guiada** | Series, repeticiones, cronómetro de descanso y técnica a la vista. |
 | **Progreso** | Sesiones y minutos por mes, racha semanal y evolución del peso. |
+
+Dentro de cada sección los ejercicios se filtran por grupo muscular: piernas, isquiotibiales,
+glúteos, pantorrillas, pecho, espalda, hombros, bíceps, tríceps, antebrazos y core.
 
 Cada ejercicio trae una figura animada, la técnica paso a paso, los errores comunes, la respiración
 y consejos **para ti**: según tu salud, nivel, edad, estatura y peso (qué modificar, qué hacer en su
@@ -115,7 +119,8 @@ ni probado en un simulador o un teléfono**. La primera compilación es el paso 
 ## English
 
 - **Sections:** gym, functional, at-home (household items), Pilates, martial arts (kickboxing,
-  jiu-jitsu, taekwondo, karate solo drills) and adapted (by health condition) exercise libraries;
+  jiu-jitsu, taekwondo, karate solo drills), stretching (by muscle group) and adapted (by health
+  condition) exercise libraries, each filtered by muscle group;
   body metrics and nutrition; a generated four-week monthly plan; a guided workout player; progress
   tracking.
 - **Data:** stored only on the device (`localStorage`). Back it up or move it from

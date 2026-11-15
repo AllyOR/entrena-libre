@@ -5,7 +5,7 @@ import type { SessionKind, WeekFocus } from '../lib/plan'
 import type { Activity, Discipline, Goal, Level, Muscle, Section } from '../types'
 import type { MessageKey } from './es'
 
-export const SECTIONS: Section[] = ['gym', 'functional', 'home', 'pilates', 'mma', 'adapted']
+export const SECTIONS: Section[] = ['gym', 'functional', 'home', 'pilates', 'mma', 'stretch', 'adapted']
 
 export const SECTION_KEY: Record<Section, MessageKey> = {
   gym: 'secGym',
@@ -14,6 +14,7 @@ export const SECTION_KEY: Record<Section, MessageKey> = {
   adapted: 'secAdapted',
   pilates: 'secPilates',
   mma: 'secMma',
+  stretch: 'secStretch',
 }
 export const SECTION_DESC_KEY: Record<Section, MessageKey> = {
   gym: 'secGymDesc',
@@ -22,6 +23,7 @@ export const SECTION_DESC_KEY: Record<Section, MessageKey> = {
   adapted: 'secAdaptedDesc',
   pilates: 'secPilatesDesc',
   mma: 'secMmaDesc',
+  stretch: 'secStretchDesc',
 }
 export const DISCIPLINE_KEY: Record<Discipline, MessageKey> = {
   kickboxing: 'dKickboxing',
@@ -31,11 +33,15 @@ export const DISCIPLINE_KEY: Record<Discipline, MessageKey> = {
 }
 export const MUSCLE_KEY: Record<Muscle, MessageKey> = {
   legs: 'mLegs',
+  hamstrings: 'mHamstrings',
   glutes: 'mGlutes',
+  calves: 'mCalves',
   chest: 'mChest',
   back: 'mBack',
   shoulders: 'mShoulders',
-  arms: 'mArms',
+  biceps: 'mBiceps',
+  triceps: 'mTriceps',
+  forearms: 'mForearms',
   core: 'mCore',
   cardio: 'mCardio',
   mobility: 'mMobility',

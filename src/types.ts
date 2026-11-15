@@ -5,18 +5,22 @@ export type L10n = Record<Lang, string>
 export type L10nList = Record<Lang, string[]>
 
 /** The exercise sections of the app. */
-export type Section = 'gym' | 'functional' | 'home' | 'adapted' | 'pilates' | 'mma'
+export type Section = 'gym' | 'functional' | 'home' | 'adapted' | 'pilates' | 'mma' | 'stretch'
 
 /** The martial arts grouped in the `mma` section. */
 export type Discipline = 'kickboxing' | 'jiujitsu' | 'taekwondo' | 'karate'
 
 export type Muscle =
   | 'legs'
+  | 'hamstrings'
   | 'glutes'
+  | 'calves'
   | 'chest'
   | 'back'
   | 'shoulders'
-  | 'arms'
+  | 'biceps'
+  | 'triceps'
+  | 'forearms'
   | 'core'
   | 'cardio'
   | 'mobility'
@@ -30,6 +34,7 @@ export type Slot =
   | 'pull'
   | 'overhead'
   | 'arms'
+  | 'calves'
   | 'core'
   | 'cardio'
   | 'mobility'
@@ -130,12 +135,25 @@ export const POSE_IDS = [
   'technicalStandUp',
   'shrimp',
   'sprawl',
+  'seatedCalfRaise',
+  'wristCurl',
+  'deadHang',
+  'legCurl',
+  'nordic',
+  'quadStretch',
+  'hipFlexorStretch',
+  'calfStretch',
+  'chestStretch',
+  'crossArm',
+  'tricepsStretch',
+  'wristStretch',
+  'sideBend',
 ] as const
 
 export type PoseId = (typeof POSE_IDS)[number]
 
 export interface Exercise {
-  /** Unique, kebab-case, prefixed by its file: `gym-`, `fun-`, `home-`, `ada-`, `pil-`, `mma-`. */
+  /** Unique, kebab-case, prefixed by its file: `gym-`, `fun-`, `home-`, `ada-`, `pil-`, `mma-`, `str-`. */
   id: string
   /** Sections whose library lists it. */
   sections: Section[]

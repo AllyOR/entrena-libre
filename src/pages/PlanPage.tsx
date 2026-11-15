@@ -152,7 +152,7 @@ export function PlanPage() {
           </div>
           {stale && <p className="note warn">{t('planStale')}</p>}
           <p className="note muted small">
-            {t('warmup')} {t('cooldown')}
+            {t('warmup')} {t('cooldown')} <a href={href('exercises', 'stretch')}>{t('cooldownLink')}</a>
           </p>
 
           {plan.weeks.map((week, w) => (
