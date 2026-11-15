@@ -3,7 +3,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 import { defineConfig } from 'vitest/config'
 
 // `base: './'` keeps every asset URL relative, so the build works unchanged at a
-// domain root (Vercel, Netlify) and under a sub-path (GitHub Pages: /entrena-libre/).
+// domain root (Vercel, Netlify) and under a sub-path (GitHub Pages: /training-app/).
 // `--mode native` builds for the Capacitor shells, which serve the files from the app
 // bundle: a service worker there would only risk showing a stale version, so the PWA
 // plugin is disabled (its `virtual:pwa-register` module then resolves to a no-op).
