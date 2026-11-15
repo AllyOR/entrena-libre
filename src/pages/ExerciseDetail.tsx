@@ -49,7 +49,7 @@ export function Technique({ exercise }: { exercise: Exercise }) {
 
 export function ExerciseDetail({ id }: { id?: string }) {
   const { t, l } = useI18n()
-  const { profile } = useStore().state
+  const { profile, units } = useStore().state
   const exercise = id ? exerciseById(id) : undefined
 
   if (!exercise) {
@@ -63,7 +63,7 @@ export function ExerciseDetail({ id }: { id?: string }) {
     )
   }
 
-  const tips = profile ? tipsFor(exercise, profile) : []
+  const tips = profile ? tipsFor(exercise, profile, units) : []
   return (
     <article className="detail">
       <button type="button" className="link-back" onClick={() => window.history.back()}>

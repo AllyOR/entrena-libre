@@ -3,14 +3,18 @@ import { BarChart, LineChart, Ring } from '../components/charts'
 import { useI18n } from '../i18n/useI18n'
 import { formatDate, formatMonth, isoDate, monthKey } from '../lib/dates'
 import { monthStats, weekStreak } from '../lib/stats'
+import { typedNumber } from '../lib/bodyDraft'
 import { LIMITS } from '../lib/storage'
+import { LENGTH_UNIT, WEIGHT_UNIT, lengthIn, lengthToCm, weightIn, weightToKg } from '../lib/units'
 import { useStore } from '../state/store'
 import { NeedProfile } from './PlanPage'
 
 export function Progress() {
   const { t, lang, n } = useI18n()
   const { state, addMeasurement, removeMeasurement } = useStore()
-  const { profile, plans, measurements } = state
+  const { profile, plans, measurements, units } = state
+  const weightUnit = WEIGHT_UNIT[units]
+  const lengthUnit = LENGTH_UNIT[units]
   const [date, setDate] = useState(isoDate())
   const [weight, setWeight] = useState('')
   const [waist, setWaist] = useState('')
@@ -32,9 +36,14 @@ export function Progress() {
 
   const submit = (event: FormEvent) => {
     event.preventDefault()
-    const weightKg = Number(weight)
-    if (!weightKg) return
-    addMeasurement({ date, weightKg, waistCm: waist ? Number(waist) : undefined })
+    const typedWeight = typedNumber(weight)
+    const typedWaist = typedNumber(waist)
+    if (!typedWeight) return
+    addMeasurement({
+      date,
+      weightKg: weightToKg(typedWeight, units),
+      waistCm: typedWaist === undefined ? undefined : lengthToCm(typedWaist, units),
+    })
     setWeight('')
     setWaist('')
   }
@@ -86,12 +95,16 @@ export function Progress() {
             <>
               <LineChart
                 label={t('weightTitle')}
-                unit="kg"
-                points={measurements.map((m) => ({ label: formatDate(m.date, lang), value: m.weightKg }))}
+                unit={weightUnit}
+                points={measurements.map((m) => ({ label: formatDate(m.date, lang), value: weightIn(m.weightKg, units) }))}
               />
               {measurements.length > 1 && (
                 <p className="muted small">
-                  {t('change', { n: `${last.weightKg >= first.weightKg ? '+' : '−'}${n(Math.abs(Math.round((last.weightKg - first.weightKg) * 10) / 10))}`, date: formatDate(first.date, lang) })}
+                  {t('change', {
+                    n: `${last.weightKg >= first.weightKg ? '+' : '−'}${n(Math.abs(Math.round((weightIn(last.weightKg, units) - weightIn(first.weightKg, units)) * 10) / 10))}`,
+                    unit: weightUnit,
+                    date: formatDate(first.date, lang),
+                  })}
                 </p>
               )}
             </>
@@ -107,26 +120,26 @@ export function Progress() {
             <input type="date" value={date} max={isoDate()} required onChange={(e) => setDate(e.target.value)} />
           </label>
           <label>
-            {t('weightKg')}
+            {t('weightKg', { unit: weightUnit })}
             <input
               type="number"
               inputMode="decimal"
               step="0.1"
-              min={LIMITS.weightKg[0]}
-              max={LIMITS.weightKg[1]}
+              min={weightIn(LIMITS.weightKg[0], units)}
+              max={weightIn(LIMITS.weightKg[1], units)}
               required
               value={weight}
               onChange={(e) => setWeight(e.target.value)}
             />
           </label>
           <label>
-            {t('waistCm')} <span className="muted small">({t('optional')})</span>
+            {t('waistCm', { unit: lengthUnit })} <span className="muted small">({t('optional')})</span>
             <input
               type="number"
               inputMode="decimal"
               step="0.1"
-              min={LIMITS.waistCm[0]}
-              max={LIMITS.waistCm[1]}
+              min={lengthIn(LIMITS.waistCm[0], units)}
+              max={lengthIn(LIMITS.waistCm[1], units)}
               value={waist}
               onChange={(e) => setWaist(e.target.value)}
             />
@@ -144,8 +157,8 @@ export function Progress() {
                 <thead>
                   <tr>
                     <th>{t('date')}</th>
-                    <th>{t('weightKg')}</th>
-                    <th>{t('waistCm')}</th>
+                    <th>{t('weightKg', { unit: weightUnit })}</th>
+                    <th>{t('waistCm', { unit: lengthUnit })}</th>
                     <th>
                       <span className="sr-only">{t('delete')}</span>
                     </th>
@@ -155,8 +168,8 @@ export function Progress() {
                   {[...measurements].reverse().map((m) => (
                     <tr key={m.date}>
                       <td>{formatDate(m.date, lang)}</td>
-                      <td>{n(m.weightKg)}</td>
-                      <td>{m.waistCm ? n(m.waistCm) : '—'}</td>
+                      <td>{n(weightIn(m.weightKg, units))}</td>
+                      <td>{m.waistCm ? n(lengthIn(m.waistCm, units)) : '—'}</td>
                       <td>
                         <button type="button" className="btn small" onClick={() => removeMeasurement(m.date)}>
                           {t('delete')}

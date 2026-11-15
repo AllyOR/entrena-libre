@@ -162,7 +162,7 @@ export function Workout({ month, sessionId }: { month?: string; sessionId?: stri
     }
   }
 
-  const tips = state.profile ? tipsFor(exercise, state.profile).filter((tip) => tip.kind !== 'info') : []
+  const tips = state.profile ? tipsFor(exercise, state.profile, state.units).filter((tip) => tip.kind !== 'info') : []
 
   return (
     <div className="workout">

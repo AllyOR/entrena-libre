@@ -6,6 +6,7 @@ import { conditionById } from '../data/conditions'
 import { EXERCISES } from '../data/exercises'
 import type { ConditionId, Exercise, L10n, PoseId, Profile, Slot } from '../types'
 import { bmi, effectiveConditions, healthyWeightRange } from './nutrition'
+import { WEIGHT_UNIT, formatHeight, loadIn, type Units } from './units'
 
 export type Status = 'ok' | 'caution' | 'avoid'
 
@@ -87,7 +88,7 @@ const SEATED_MACHINE: PoseId[] = ['benchPress', 'legPress', 'latPulldown', 'seat
 const BALANCE: PoseId[] = ['lunge', 'stepUp', 'singleLegStand', 'calfRaise', 'frontKick', 'roundKick', 'kneeStrike', 'quadStretch']
 
 /** What this person should know before doing this exercise, most important first. */
-export function tipsFor(e: Exercise, p: Profile): Tip[] {
+export function tipsFor(e: Exercise, p: Profile, units: Units = 'metric'): Tip[] {
   const tips: Tip[] = []
   const names = (ids: ConditionId[], lang: 'es' | 'en') => ids.map((c) => conditionById(c).name[lang]).join(', ')
 
@@ -127,8 +128,8 @@ export function tipsFor(e: Exercise, p: Profile): Tip[] {
       id: 'load',
       kind: 'info',
       text: {
-        es: `Carga inicial orientativa para tu peso y nivel: ${load} kg ${unit.es}. Súbela solo si la técnica no cambia.`,
-        en: `Suggested starting load for your weight and level: ${load} kg ${unit.en}. Increase it only while your technique stays the same.`,
+        es: `Carga inicial orientativa para tu peso y nivel: ${loadIn(load, units)} ${WEIGHT_UNIT[units]} ${unit.es}. Súbela solo si la técnica no cambia.`,
+        en: `Suggested starting load for your weight and level: ${loadIn(load, units)} ${WEIGHT_UNIT[units]} ${unit.en}. Increase it only while your technique stays the same.`,
       },
     })
   }
@@ -138,8 +139,8 @@ export function tipsFor(e: Exercise, p: Profile): Tip[] {
       id: 'tall',
       kind: 'info',
       text: {
-        es: `Con tu estatura (${p.heightCm} cm) separa un poco más los pies y permite más inclinación del torso: en piernas largas es lo correcto.`,
-        en: `At your height (${p.heightCm} cm) take a slightly wider stance and allow more forward lean: with long legs that is correct form.`,
+        es: `Con tu estatura (${formatHeight(p.heightCm, units)}) separa un poco más los pies y permite más inclinación del torso: en piernas largas es lo correcto.`,
+        en: `At your height (${formatHeight(p.heightCm, units)}) take a slightly wider stance and allow more forward lean: with long legs that is correct form.`,
       },
     })
   }

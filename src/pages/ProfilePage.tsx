@@ -1,25 +1,21 @@
 import { useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import { RemindersCard } from '../components/RemindersCard'
 import { SELECTABLE_CONDITIONS } from '../data/conditions'
-import type { MessageKey } from '../i18n/es'
 import { ACTIVITY_KEY, GOAL_KEY, LEVEL_KEY, SECTION_KEY } from '../i18n/labels'
 import { useI18n } from '../i18n/useI18n'
+import { bodyDraft, bodyFromDraft, convertBodyDraft, typedNumber, type BodyDraft } from '../lib/bodyDraft'
 import { isoDate } from '../lib/dates'
 import { LIMITS, parseProfile, parseState } from '../lib/storage'
+import { LENGTH_UNIT, WEIGHT_UNIT, lengthIn, weightIn, type Units } from '../lib/units'
 import { href, navigate } from '../router'
 import { useStore } from '../state/store'
 import type { Activity, ConditionId, Goal, Level, Place, Sex } from '../types'
 
-/** The form's fields as typed: numbers stay strings until the profile is saved. */
-interface Draft {
+/** The form's fields as typed: numbers stay strings, in the person's units, until the profile is saved. */
+interface Draft extends BodyDraft {
   name: string
   sex: Sex
   age: string
-  heightCm: string
-  weightKg: string
-  waistCm: string
-  neckCm: string
-  hipCm: string
   activity: Activity
   goal: Goal
   level: Level
@@ -34,22 +30,20 @@ const LEVELS: Level[] = [1, 2, 3]
 const PLACES: Place[] = ['gym', 'functional', 'home', 'pilates', 'mma']
 const DAYS = [2, 3, 4, 5, 6]
 
-type NumberField = 'age' | 'heightCm' | 'weightKg' | 'waistCm' | 'neckCm' | 'hipCm'
+type NumberField = 'age' | keyof BodyDraft
+
+const UNIT_OPTIONS: Units[] = ['metric', 'imperial']
 
 export function ProfilePage() {
   const { t, l } = useI18n()
-  const { state, saveProfile, replaceAll, reset } = useStore()
+  const { state, saveProfile, setUnits, replaceAll, reset } = useStore()
+  const { units } = state
   const saved = state.profile
-  const str = (v: number | undefined) => (v === undefined ? '' : String(v))
   const [draft, setDraft] = useState<Draft>({
     name: saved?.name ?? '',
     sex: saved?.sex ?? 'female',
-    age: str(saved?.age),
-    heightCm: str(saved?.heightCm),
-    weightKg: str(saved?.weightKg),
-    waistCm: str(saved?.waistCm),
-    neckCm: str(saved?.neckCm),
-    hipCm: str(saved?.hipCm),
+    age: saved ? String(saved.age) : '',
+    ...bodyDraft(saved ?? {}, units),
     activity: saved?.activity ?? 'light',
     goal: saved?.goal ?? 'maintain',
     level: saved?.level ?? 1,
@@ -64,21 +58,18 @@ export function ProfilePage() {
     setDraft((d) => ({ ...d, [key]: value }))
     setMessage(null)
   }
+  // Switching units re-expresses what is already typed, so nothing has to be entered again.
+  const changeUnits = (next: Units) => {
+    setDraft((d) => ({ ...d, ...convertBodyDraft(d, units, next, saved ?? {}) }))
+    setUnits(next)
+    setMessage(null)
+  }
   const toggleCondition = (id: ConditionId) =>
     set('conditions', draft.conditions.includes(id) ? draft.conditions.filter((c) => c !== id) : [...draft.conditions, id])
 
   const submit = (event: FormEvent) => {
     event.preventDefault()
-    const num = (v: string) => (v.trim() === '' ? undefined : Number(v.replace(',', '.')))
-    const profile = parseProfile({
-      ...draft,
-      age: num(draft.age),
-      heightCm: num(draft.heightCm),
-      weightKg: num(draft.weightKg),
-      waistCm: num(draft.waistCm),
-      neckCm: num(draft.neckCm),
-      hipCm: num(draft.hipCm),
-    })
+    const profile = parseProfile({ ...draft, age: typedNumber(draft.age), ...bodyFromDraft(draft, units, saved ?? {}) })
     if (!profile) {
       setMessage({ kind: 'error', text: t('invalid') })
       return
@@ -110,17 +101,23 @@ export function ProfilePage() {
     navigate()
   }
 
-  const numberInput = (field: NumberField, label: MessageKey, required: boolean, step = '1') => (
+  const weightUnit = WEIGHT_UNIT[units]
+  const lengthUnit = LENGTH_UNIT[units]
+  /** The allowed range of a stored length or weight, in the units on screen. */
+  const lengthRange = (key: 'waistCm' | 'neckCm' | 'hipCm') => LIMITS[key].map((cm) => lengthIn(cm, units)) as [number, number]
+  const weightRange = LIMITS.weightKg.map((kg) => weightIn(kg, units)) as [number, number]
+
+  const numberInput = (field: NumberField, label: string, [min, max]: readonly [number, number], required: boolean, step = '1') => (
     <label>
       <span>
-        {t(label)} {!required && <span className="muted small">({t('optional')})</span>}
+        {label} {!required && <span className="muted small">({t('optional')})</span>}
       </span>
       <input
         type="number"
         inputMode="decimal"
         step={step}
-        min={LIMITS[field][0]}
-        max={LIMITS[field][1]}
+        min={min}
+        max={max}
         required={required}
         value={draft[field]}
         onChange={(e) => set(field, e.target.value)}
@@ -156,9 +153,20 @@ export function ProfilePage() {
               <span>{t('sex')}</span>
               {radios('sex', ['female', 'male'] as const, draft.sex, (o) => t(o), (o) => set('sex', o))}
             </div>
-            {numberInput('age', 'age', true)}
-            {numberInput('heightCm', 'heightCm', true)}
-            {numberInput('weightKg', 'weightKg', true, '0.1')}
+            {numberInput('age', t('age'), LIMITS.age, true)}
+            <div className="field">
+              <span>{t('units')}</span>
+              {radios('units', UNIT_OPTIONS, units, (o) => t(o === 'metric' ? 'unitsMetric' : 'unitsImperial'), changeUnits)}
+            </div>
+            {units === 'metric' ? (
+              numberInput('heightCm', t('heightCm', { unit: 'cm' }), LIMITS.heightCm, true, '0.1')
+            ) : (
+              <>
+                {numberInput('heightFt', t('heightFeet'), [3, 7], true)}
+                {numberInput('heightIn', t('heightInches'), [0, 11], false)}
+              </>
+            )}
+            {numberInput('weight', t('weightKg', { unit: weightUnit }), weightRange, true, '0.1')}
           </div>
           <label>
             <span>{t('activity')}</span>
@@ -176,9 +184,9 @@ export function ProfilePage() {
           <legend>{t('measurementsOpt')}</legend>
           <p className="muted small">{t('measurementsHint')}</p>
           <div className="form-grid">
-            {numberInput('waistCm', 'waistCm', false, '0.1')}
-            {numberInput('neckCm', 'neckCm', false, '0.1')}
-            {numberInput('hipCm', 'hipCm', false, '0.1')}
+            {numberInput('waist', t('waistCm', { unit: lengthUnit }), lengthRange('waistCm'), false, '0.1')}
+            {numberInput('neck', t('neckCm', { unit: lengthUnit }), lengthRange('neckCm'), false, '0.1')}
+            {numberInput('hip', t('hipCm', { unit: lengthUnit }), lengthRange('hipCm'), false, '0.1')}
           </div>
         </fieldset>
 

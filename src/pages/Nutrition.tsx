@@ -16,6 +16,7 @@ import {
   waistToHeight,
   waterLiters,
 } from '../lib/nutrition'
+import { VOLUME_UNIT, WEIGHT_UNIT, volumeIn, weightIn } from '../lib/units'
 import { href } from '../router'
 import { useStore } from '../state/store'
 import { NeedProfile } from './PlanPage'
@@ -49,7 +50,7 @@ function BmiScale({ value, format }: { value: number; format: (v: number) => str
 
 export function Nutrition() {
   const { t, l, n } = useI18n()
-  const { profile } = useStore().state
+  const { profile, units } = useStore().state
   const [offset, setOffset] = useState(0)
 
   if (!profile) {
@@ -91,7 +92,7 @@ export function Nutrition() {
             <span className="big-number">{n(bodyMass)}</span> <strong>{t(BMI_KEY[bmiCategory(bodyMass)])}</strong>
           </p>
           <BmiScale value={bodyMass} format={n} />
-          <p>{t('healthyRange', { min: n(minKg), max: n(maxKg) })}</p>
+          <p>{t('healthyRange', { min: n(weightIn(minKg, units)), max: n(weightIn(maxKg, units)), unit: WEIGHT_UNIT[units] })}</p>
           <p className="muted small">{t('bmiNote')}</p>
         </section>
 
@@ -137,7 +138,7 @@ export function Nutrition() {
             </div>
           ))}
           <p>
-            <strong>{t('water')}:</strong> {t('waterValue', { n: n(waterLiters(profile.weightKg)) })}
+            <strong>{t('water')}:</strong> {t('waterValue', { n: n(volumeIn(waterLiters(profile.weightKg), units)), unit: VOLUME_UNIT[units] })}
           </p>
         </section>
 
