@@ -33,7 +33,9 @@ y consejos **para ti**: según tu salud, nivel, edad, estatura y peso (qué modi
 lugar y con qué carga empezar).
 
 La interfaz está en español e inglés, con modo claro y oscuro, y se adapta a móvil y escritorio. La
-web se puede instalar (PWA) y funciona sin conexión.
+web se puede instalar (PWA) y funciona sin conexión. Cuando se publica una versión nueva, la app
+abierta o instalada se recarga sola para usarla; durante una sesión de entrenamiento espera a que
+salgas de ella (`src/pwa.ts`).
 
 ## Tus datos
 
