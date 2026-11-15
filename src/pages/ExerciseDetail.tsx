@@ -1,12 +1,15 @@
 import { Icon } from '../components/Icon'
 import { LevelDots } from '../components/ExerciseCard'
+import { Paywall } from '../components/Paywall'
 import { exerciseById } from '../data/exercises'
 import { Figure } from '../figure/Figure'
 import { POSES } from '../figure/poses'
 import { DISCIPLINE_KEY, LEVEL_KEY, MUSCLE_KEY, SECTION_KEY } from '../i18n/labels'
 import { useI18n } from '../i18n/useI18n'
 import { tipsFor, type Tip } from '../lib/personalize'
+import { lockedExercise } from '../lib/premium'
 import { href } from '../router'
+import { usePremium } from '../state/premium'
 import { useStore } from '../state/store'
 import type { Exercise } from '../types'
 
@@ -50,6 +53,7 @@ export function Technique({ exercise }: { exercise: Exercise }) {
 export function ExerciseDetail({ id }: { id?: string }) {
   const { t, l } = useI18n()
   const { profile, units } = useStore().state
+  const premium = usePremium()
   const exercise = id ? exerciseById(id) : undefined
 
   if (!exercise) {
@@ -60,6 +64,18 @@ export function ExerciseDetail({ id }: { id?: string }) {
           {t('explore')}
         </a>
       </>
+    )
+  }
+
+  if (lockedExercise(exercise, premium)) {
+    return (
+      <article className="detail">
+        <button type="button" className="link-back" onClick={() => window.history.back()}>
+          <Icon name="chevronLeft" size={18} /> {t('back')}
+        </button>
+        <h1>{l(exercise.name)}</h1>
+        <Paywall compact />
+      </article>
     )
   }
 

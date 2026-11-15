@@ -1,5 +1,7 @@
 import { Ring } from '../components/charts'
 import { Icon } from '../components/Icon'
+import { lockedSection } from '../lib/premium'
+import { usePremium } from '../state/premium'
 import { exercisesIn } from '../data/exercises'
 import { Figure } from '../figure/Figure'
 import { BMI_KEY, KIND_KEY, SECTIONS, SECTION_DESC_KEY, SECTION_KEY } from '../i18n/labels'
@@ -23,6 +25,7 @@ const SECTION_ART: Record<Section, { pose: PoseId; gear: Gear }> = {
 
 function SectionCards() {
   const { t } = useI18n()
+  const premium = usePremium()
   return (
     <>
       <h2>{t('sections')}</h2>
@@ -31,7 +34,14 @@ function SectionCards() {
           <a key={s} className="card section-card" href={href('exercises', s)}>
             <Figure pose={SECTION_ART[s].pose} gear={SECTION_ART[s].gear} label="" />
             <span>
-              <strong>{t(SECTION_KEY[s])}</strong>
+              <strong>
+                {t(SECTION_KEY[s])}
+                {lockedSection(s, premium) && (
+                  <span className="lock" title={t('premiumLocked')}>
+                    <Icon name="lock" size={13} />
+                  </span>
+                )}
+              </strong>
               <span className="muted small">{t(SECTION_DESC_KEY[s])}</span>
               <span className="muted small">{t('exercisesCount', { n: exercisesIn(s).length })}</span>
             </span>

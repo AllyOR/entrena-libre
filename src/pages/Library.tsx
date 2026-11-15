@@ -1,12 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
 import { ExerciseCard } from '../components/ExerciseCard'
+import { Icon } from '../components/Icon'
+import { Paywall } from '../components/Paywall'
 import { CONDITIONS, SELECTABLE_CONDITIONS, conditionById, type Condition } from '../data/conditions'
 import { EXERCISES, exercisesIn } from '../data/exercises'
 import { DISCIPLINE_KEY, MUSCLE_KEY, SECTIONS, SECTION_DESC_KEY, SECTION_KEY } from '../i18n/labels'
 import type { MessageKey } from '../i18n/es'
 import { useI18n } from '../i18n/useI18n'
 import { effectiveConditions } from '../lib/nutrition'
+import { lockedSection } from '../lib/premium'
 import { href, replaceRoute } from '../router'
+import { usePremium } from '../state/premium'
 import { useStore } from '../state/store'
 import type { ConditionId, Discipline, Exercise, Muscle, Section } from '../types'
 
@@ -15,6 +19,7 @@ const isSection = (v: string | undefined): v is Section => SECTIONS.includes(v a
 export function Library({ section: raw, filter }: { section?: string; filter?: string }) {
   const { t } = useI18n()
   const section: Section = isSection(raw) ? raw : 'gym'
+  const premium = usePremium()
   const tabs = useRef<HTMLElement>(null)
 
   // On a phone the tabs scroll sideways: keep the current one in view.
@@ -31,11 +36,25 @@ export function Library({ section: raw, filter }: { section?: string; filter?: s
         {SECTIONS.map((s) => (
           <a key={s} href={href('exercises', s)} className="tab" aria-current={s === section ? 'page' : undefined}>
             {t(SECTION_KEY[s])}
+            {lockedSection(s, premium) && (
+              <span className="lock" title={t('premiumLocked')}>
+                <Icon name="lock" size={13} />
+              </span>
+            )}
           </a>
         ))}
       </nav>
       <p className="lead">{t(SECTION_DESC_KEY[section])}</p>
-      {section === 'adapted' ? <Adapted /> : <SectionList section={section} filter={filter} />}
+      {lockedSection(section, premium) ? (
+        <>
+          <p className="muted small">{t('exercisesCount', { n: exercisesIn(section).length })}</p>
+          <Paywall compact />
+        </>
+      ) : section === 'adapted' ? (
+        <Adapted />
+      ) : (
+        <SectionList section={section} filter={filter} />
+      )}
     </>
   )
 }

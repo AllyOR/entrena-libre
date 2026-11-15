@@ -7,6 +7,7 @@ const SECTIONS: [MessageKey, MessageKey][] = [
   ['privacyStoredTitle', 'privacyStored'],
   ['privacyWhereTitle', 'privacyWhere'],
   ['privacyPermissionsTitle', 'privacyPermissions'],
+  ['privacyPurchasesTitle', 'privacyPurchases'],
   ['privacyControlTitle', 'privacyControl'],
   ['privacyHealthTitle', 'privacyHealth'],
 ]
