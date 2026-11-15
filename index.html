@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="EntrenaLibre: plan de entrenamiento mensual, técnica ilustrada, IMC, calorías y menús. Gratis, sin cuenta y sin gimnasio." />
+    <meta name="theme-color" content="#0f766e" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="apple-touch-icon" href="./icon-192.png" />
+    <title>EntrenaLibre</title>
+    <script>
+      // Apply the saved theme before the first paint, to avoid a flash of the wrong one.
+      try {
+        var saved = JSON.parse(localStorage.getItem('entrena-libre:v1') || 'null')
+        var theme = saved && saved.theme
+        if (theme !== 'light' && theme !== 'dark') theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        document.documentElement.dataset.theme = theme
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>EntrenaLibre necesita JavaScript. / EntrenaLibre needs JavaScript.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
