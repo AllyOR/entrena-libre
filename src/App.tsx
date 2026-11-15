@@ -32,7 +32,7 @@ function Page({ route }: { route: string[] }) {
     case undefined:
       return <Home />
     case 'exercises':
-      return <Library section={a} />
+      return <Library section={a} filter={b} />
     case 'exercise':
       return <ExerciseDetail id={a} />
     case 'plan':
