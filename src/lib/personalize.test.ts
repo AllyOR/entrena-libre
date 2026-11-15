@@ -77,6 +77,16 @@ describe('tipsFor', () => {
   })
 })
 
+describe('tipsFor in imperial units', () => {
+  it('gives the load in pounds and the height in feet and inches', () => {
+    const squat = must('gym-barbell-back-squat')
+    const tips = tipsFor(squat, { ...profile, heightCm: 190.5 }, 'imperial')
+    expect(tips.find((t) => t.id === 'load')?.text.en).toMatch(/: \d+ lb in total/)
+    expect(tips.find((t) => t.id === 'load')?.text.es).not.toContain(' kg ')
+    expect(tips.find((t) => t.id === 'tall')?.text.en).toContain('6 ft 3 in')
+  })
+})
+
 describe('startingLoadKg', () => {
   it('suggests a load only for gym weights, in 2.5 kg steps', () => {
     expect(startingLoadKg(must('ada-bird-dog'), profile)).toBeNull()

@@ -8,6 +8,7 @@ import { CONDITIONS } from '../data/conditions'
 import type { Activity, ConditionId, Goal, Lang, Level, Place, Profile, Sex } from '../types'
 import type { MonthPlan, PlanItem, Session, Week } from './plan'
 import { DEFAULT_REMINDERS, parseReminders, type Reminders } from './reminders'
+import type { Units } from './units'
 
 /** Kept from the app's first name, so data saved before the rename is still found. */
 export const STORAGE_KEY = 'entrena-libre:v1'
@@ -25,6 +26,8 @@ export interface AppState {
   v: 1
   lang: Lang
   theme: Theme
+  /** How weights and lengths are typed and shown. Everything is stored in metric. */
+  units: Units
   profile: Profile | null
   /** By month, `YYYY-MM`. */
   plans: Record<string, MonthPlan>
@@ -137,8 +140,8 @@ function parseMeasurements(v: unknown): Measurement[] {
   return [...byDate.values()].sort((a, b) => a.date.localeCompare(b.date))
 }
 
-export function defaultState(lang: Lang, theme: Theme): AppState {
-  return { v: 1, lang, theme, profile: null, plans: {}, measurements: [], reminders: DEFAULT_REMINDERS }
+export function defaultState(lang: Lang, theme: Theme, units: Units = 'metric'): AppState {
+  return { v: 1, lang, theme, units, profile: null, plans: {}, measurements: [], reminders: DEFAULT_REMINDERS }
 }
 
 /** Reads saved or imported JSON. Returns null when it is not this app's data at all. */
@@ -162,6 +165,7 @@ export function parseState(raw: string | null, fallback: AppState): AppState | n
     v: 1,
     lang: oneOf(data.lang, ['es', 'en'] as const) ? data.lang : fallback.lang,
     theme: oneOf(data.theme, ['light', 'dark'] as const) ? data.theme : fallback.theme,
+    units: oneOf(data.units, ['metric', 'imperial'] as const) ? data.units : fallback.units,
     profile: parseProfile(data.profile),
     plans,
     measurements: parseMeasurements(data.measurements),

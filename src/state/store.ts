@@ -2,11 +2,13 @@ import { createContext, useContext } from 'react'
 import type { Lang, Profile } from '../types'
 import type { Reminders } from '../lib/reminders'
 import type { AppState, Measurement } from '../lib/storage'
+import type { Units } from '../lib/units'
 
 export interface Store {
   state: AppState
   setLang(lang: Lang): void
   toggleTheme(): void
+  setUnits(units: Units): void
   /** Saves the profile and logs its weight as today's measurement. */
   saveProfile(profile: Profile): void
   /** Creates the month's plan, or a new variation when one exists. */

@@ -1,7 +1,7 @@
 import type { MessageKey } from '../i18n/es'
 import { useI18n } from '../i18n/useI18n'
 
-const ISSUES_URL = 'https://github.com/AllyOR/entrena-libre/issues'
+const ISSUES_URL = 'https://github.com/AllyOR/training-app/issues'
 
 const SECTIONS: [MessageKey, MessageKey][] = [
   ['privacyStoredTitle', 'privacyStored'],

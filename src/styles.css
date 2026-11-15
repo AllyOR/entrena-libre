@@ -61,6 +61,11 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
+  /* An app, not a document: no text selection, no grey flash or callout menu on touch. */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
   font: 16px/1.5 system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
@@ -105,6 +110,22 @@ ol {
 }
 [hidden] {
   display: none !important;
+}
+/* Typing still needs a caret and selection. */
+input,
+textarea,
+select {
+  -webkit-user-select: text;
+  user-select: text;
+}
+/* No 300 ms double-tap delay or zoom on controls. */
+a,
+button,
+label,
+summary,
+input,
+select {
+  touch-action: manipulation;
 }
 
 .sr-only {
@@ -259,9 +280,13 @@ ol {
   color: var(--text);
   cursor: pointer;
 }
-.icon-btn:hover:not(:disabled),
 .icon-btn[aria-current='page'] {
   background: var(--surface-2);
+}
+@media (hover: hover) {
+  .icon-btn:hover:not(:disabled) {
+    background: var(--surface-2);
+  }
 }
 .icon-btn:disabled {
   opacity: 0.35;
@@ -336,8 +361,10 @@ main:focus {
     border-radius: 10px;
     font-size: 0.95rem;
   }
-  .nav a:hover {
-    background: var(--surface-2);
+  @media (hover: hover) {
+    .nav a:hover {
+      background: var(--surface-2);
+    }
   }
   .nav a[aria-current='page'] {
     background: var(--accent-soft);
@@ -363,8 +390,10 @@ a.card {
   color: inherit;
   text-decoration: none;
 }
-a.card:hover {
-  border-color: var(--accent);
+@media (hover: hover) {
+  a.card:hover {
+    border-color: var(--accent);
+  }
 }
 .card.accent {
   background: var(--accent-soft);
@@ -398,8 +427,10 @@ fieldset.card > legend {
   text-decoration: none;
   cursor: pointer;
 }
-.btn:hover:not(:disabled) {
-  border-color: var(--accent);
+@media (hover: hover) {
+  .btn:hover:not(:disabled) {
+    border-color: var(--accent);
+  }
 }
 .btn:disabled {
   opacity: 0.45;
@@ -410,9 +441,11 @@ fieldset.card > legend {
   border-color: var(--accent);
   color: var(--on-accent);
 }
-.btn.primary:hover {
-  background: var(--accent-strong);
-  border-color: var(--accent-strong);
+@media (hover: hover) {
+  .btn.primary:hover {
+    background: var(--accent-strong);
+    border-color: var(--accent-strong);
+  }
 }
 .btn.danger {
   color: var(--danger);
@@ -743,8 +776,10 @@ p > .big-number {
   text-decoration: none;
   box-shadow: var(--shadow);
 }
-.ex-card:hover {
-  border-color: var(--accent);
+@media (hover: hover) {
+  .ex-card:hover {
+    border-color: var(--accent);
+  }
 }
 .ex-card.dim .figure,
 .ex-card.dim .ex-card-name {
@@ -1402,4 +1437,12 @@ input[type='time'] {
 }
 .prose {
   max-width: 68ch;
+}
+
+/* A measurement in the other unit system, next to the one typed or shown. */
+.equivalent {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 400;
+  white-space: nowrap;
 }

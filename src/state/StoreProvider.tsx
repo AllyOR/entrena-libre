@@ -3,13 +3,14 @@ import { isoDate } from '../lib/dates'
 import { applyStatusBar } from '../lib/native'
 import { estimateMinutes, generatePlan, type MonthPlan, type Session } from '../lib/plan'
 import { STORAGE_KEY, defaultState, parseState, upsertMeasurement, type AppState } from '../lib/storage'
+import { defaultUnits } from '../lib/units'
 import type { Lang } from '../types'
 import { StoreContext, type Store } from './store'
 
 function initialState(): AppState {
   const lang: Lang = navigator.language.toLowerCase().startsWith('en') ? 'en' : 'es'
   const theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-  const fallback = defaultState(lang, theme)
+  const fallback = defaultState(lang, theme, defaultUnits(navigator.language))
   try {
     return parseState(localStorage.getItem(STORAGE_KEY), fallback) ?? fallback
   } catch {
@@ -45,6 +46,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       state,
       setLang: (lang) => setState((s) => ({ ...s, lang })),
       toggleTheme: () => setState((s) => ({ ...s, theme: s.theme === 'dark' ? 'light' : 'dark' })),
+      setUnits: (units) => setState((s) => ({ ...s, units })),
       saveProfile: (profile) =>
         setState((s) => ({
           ...s,
@@ -72,7 +74,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       removeMeasurement: (date) => setState((s) => ({ ...s, measurements: s.measurements.filter((m) => m.date !== date) })),
       setReminders: (reminders) => setState((s) => ({ ...s, reminders })),
       replaceAll: (next) => setState(next),
-      reset: () => setState((s) => defaultState(s.lang, s.theme)),
+      reset: () => setState((s) => defaultState(s.lang, s.theme, s.units)),
     }
   }, [state])
 

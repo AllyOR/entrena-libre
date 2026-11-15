@@ -62,6 +62,13 @@ describe('parseState', () => {
     expect(parseState(JSON.stringify(older), fallback)?.reminders).toEqual({ enabled: false, time: '18:00', days: [1, 3, 5] })
   })
 
+  it('keeps the units, and falls back for data saved before they existed', () => {
+    expect(parseState(JSON.stringify({ ...saved, units: 'imperial' }), fallback)?.units).toBe('imperial')
+    const { units: _dropped, ...older } = saved
+    expect(parseState(JSON.stringify(older), defaultState('en', 'light', 'imperial'))?.units).toBe('imperial')
+    expect(parseState(JSON.stringify({ ...saved, units: 'stone' }), fallback)?.units).toBe('metric')
+  })
+
   it('returns null for anything that is not this app’s data', () => {
     expect(parseState(null, fallback)).toBeNull()
     expect(parseState('not json', fallback)).toBeNull()

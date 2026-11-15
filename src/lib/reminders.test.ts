@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { DEFAULT_REMINDERS, REMINDER_IDS, parseReminders, weeklyNotifications } from './reminders'
+import { DEFAULT_REMINDERS, REMINDER_IDS, nextReminderAt, parseReminders, weeklyNotifications } from './reminders'
 
 describe('weeklyNotifications', () => {
   it('schedules nothing while reminders are off', () => {
@@ -22,6 +22,31 @@ describe('weeklyNotifications', () => {
   it('only ever uses ids that a reschedule cancels', () => {
     const all = weeklyNotifications({ enabled: true, time: '06:30', days: [0, 1, 2, 3, 4, 5, 6] })
     expect(all.map((n) => n.id)).toEqual(REMINDER_IDS)
+  })
+})
+
+describe('nextReminderAt', () => {
+  // 2026-11-16 is a Monday.
+  const monWedFri = { enabled: true, time: '18:00', days: [1, 3, 5] }
+  const at = (day: number, hour: number, minute = 0) => new Date(2026, 10, day, hour, minute)
+
+  it('is today when the time has not passed yet', () => {
+    expect(nextReminderAt(monWedFri, at(16, 9))).toEqual(at(16, 18))
+  })
+
+  it('moves to the next chosen day once today’s time has passed', () => {
+    expect(nextReminderAt(monWedFri, at(16, 18))).toEqual(at(18, 18))
+    expect(nextReminderAt(monWedFri, at(17, 7))).toEqual(at(18, 18))
+  })
+
+  it('wraps around the week', () => {
+    expect(nextReminderAt(monWedFri, at(20, 19))).toEqual(at(23, 18))
+    expect(nextReminderAt({ enabled: true, time: '06:30', days: [1] }, at(16, 7))).toEqual(at(23, 6, 30))
+  })
+
+  it('is null when reminders are off', () => {
+    expect(nextReminderAt({ ...monWedFri, enabled: false }, at(16, 9))).toBeNull()
+    expect(nextReminderAt({ ...monWedFri, days: [] }, at(16, 9))).toBeNull()
   })
 })
 

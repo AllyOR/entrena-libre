@@ -1,43 +1,57 @@
 import { useState } from 'react'
 import { useI18n } from '../i18n/useI18n'
-import { isNative, syncReminders } from '../lib/native'
+import { isNative, remindersSupported, sendTestReminder, syncReminders } from '../lib/native'
 import type { Reminders } from '../lib/reminders'
 import { useStore } from '../state/store'
 
 /** Monday first, as weeks are shown in Spanish and in most of the world. */
 const DAY_ORDER = [1, 2, 3, 4, 5, 6, 0]
 
-/** Workout reminders: saved with the profile data, delivered only by the Android and iOS apps. */
+/**
+ * Workout reminders. Turning them on asks the device for notification permission.
+ * The Android and iOS apps schedule them with the system; a browser shows them only
+ * while the app is open or in the background.
+ */
 export function RemindersCard() {
   const { t, lang } = useI18n()
   const { state, setReminders } = useStore()
   const { reminders } = state
   const [status, setStatus] = useState<{ kind: 'ok' | 'danger'; text: string } | null>(null)
-  const native = isNative()
+  const supported = remindersSupported()
+  const text = { title: t('reminderNotice'), body: t('reminderBody') }
 
   // 2024-01-07 was a Sunday: day 0.
   const dayName = (day: number) => new Intl.DateTimeFormat(lang, { weekday: 'short' }).format(new Date(2024, 0, 7 + day))
 
   const update = async (next: Reminders) => {
     setReminders(next)
-    const result = await syncReminders(next, { title: t('reminderNotice'), body: t('reminderBody') })
+    const result = await syncReminders(next, text)
     if (result === 'denied') {
       setReminders({ ...next, enabled: false })
       setStatus({ kind: 'danger', text: t('remindersDenied') })
+    } else if (result === 'unsupported') {
+      setReminders({ ...next, enabled: false })
+      setStatus({ kind: 'danger', text: t('remindersUnsupported') })
     } else if (result === 'scheduled') setStatus({ kind: 'ok', text: t('remindersOn') })
-    else if (result === 'off') setStatus({ kind: 'ok', text: t('remindersOff') })
+    else setStatus({ kind: 'ok', text: t('remindersOff') })
   }
   const toggleDay = (day: number) => {
     const days = reminders.days.includes(day) ? reminders.days.filter((d) => d !== day) : [...reminders.days, day]
     void update({ ...reminders, days, enabled: reminders.enabled && days.length > 0 })
+  }
+  const test = async () => {
+    const result = await sendTestReminder(text)
+    if (result === 'scheduled') setStatus({ kind: 'ok', text: t('remindersTestSent') })
+    else setStatus({ kind: 'danger', text: t(result === 'denied' ? 'remindersDenied' : 'remindersUnsupported') })
   }
 
   return (
     <section className="card">
       <h2>{t('remindersTitle')}</h2>
       <p>{t('remindersText')}</p>
-      {!native && <p className="note muted small">{t('remindersAppOnly')}</p>}
-      <fieldset className="plain" disabled={!native}>
+      {!supported && <p className="note warn small">{t('remindersUnsupported')}</p>}
+      {supported && !isNative() && <p className="note muted small">{t('remindersWebNote')}</p>}
+      <fieldset className="plain" disabled={!supported}>
         <label className="check">
           <input
             type="checkbox"
@@ -60,6 +74,9 @@ export function RemindersCard() {
             ))}
           </div>
         </div>
+        <button type="button" className="btn" onClick={() => void test()}>
+          {t('remindersTest')}
+        </button>
       </fieldset>
       {status && (
         <p className={`note ${status.kind}`} role="status">

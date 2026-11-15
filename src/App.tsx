@@ -1,6 +1,8 @@
+import { useEffect } from 'react'
 import { Icon, type IconName } from './components/Icon'
 import type { MessageKey } from './i18n/es'
 import { useI18n } from './i18n/useI18n'
+import { resumeWebReminders } from './lib/native'
 import { ExerciseDetail } from './pages/ExerciseDetail'
 import { Home } from './pages/Home'
 import { Library } from './pages/Library'
@@ -30,7 +32,7 @@ function Page({ route }: { route: string[] }) {
     case undefined:
       return <Home />
     case 'exercises':
-      return <Library section={a} />
+      return <Library section={a} filter={b} />
     case 'exercise':
       return <ExerciseDetail id={a} />
     case 'plan':
@@ -57,6 +59,12 @@ export function App() {
   const route = useRoute()
   const page = route[0] ?? ''
   const dark = state.theme === 'dark'
+
+  // A browser has no weekly scheduler: restart the timer for the next reminder whenever the app opens or the setting changes.
+  const { reminders, lang } = state
+  useEffect(() => {
+    resumeWebReminders(reminders, { title: t('reminderNotice'), body: t('reminderBody') })
+  }, [reminders, lang, t])
 
   return (
     <div className="shell">

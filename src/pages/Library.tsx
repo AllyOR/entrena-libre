@@ -6,13 +6,13 @@ import { DISCIPLINE_KEY, MUSCLE_KEY, SECTIONS, SECTION_DESC_KEY, SECTION_KEY } f
 import type { MessageKey } from '../i18n/es'
 import { useI18n } from '../i18n/useI18n'
 import { effectiveConditions } from '../lib/nutrition'
-import { href } from '../router'
+import { href, replaceRoute } from '../router'
 import { useStore } from '../state/store'
 import type { ConditionId, Discipline, Exercise, Muscle, Section } from '../types'
 
 const isSection = (v: string | undefined): v is Section => SECTIONS.includes(v as Section)
 
-export function Library({ section: raw }: { section?: string }) {
+export function Library({ section: raw, filter }: { section?: string; filter?: string }) {
   const { t } = useI18n()
   const section: Section = isSection(raw) ? raw : 'gym'
   const tabs = useRef<HTMLElement>(null)
@@ -35,20 +35,23 @@ export function Library({ section: raw }: { section?: string }) {
         ))}
       </nav>
       <p className="lead">{t(SECTION_DESC_KEY[section])}</p>
-      {section === 'adapted' ? <Adapted /> : <SectionList key={section} section={section} />}
+      {section === 'adapted' ? <Adapted /> : <SectionList section={section} filter={filter} />}
     </>
   )
 }
 
-function SectionList({ section }: { section: Section }) {
+/** A section's exercises. The chosen group is part of the URL, so coming back from an exercise keeps it. */
+function SectionList({ section, filter: wanted }: { section: Section; filter?: string }) {
   const { t } = useI18n()
-  const [filter, setFilter] = useState('all')
   const all = exercisesIn(section)
   // Martial arts are browsed by art; every other section by muscle group.
   const byArt = section === 'mma'
   const groupOf = (e: Exercise): string => (byArt ? (e.discipline ?? '') : e.muscle)
   const label = (group: string) => t(byArt ? DISCIPLINE_KEY[group as Discipline] : MUSCLE_KEY[group as Muscle])
   const groups = [...new Set(all.map(groupOf))]
+  // An unknown group in the URL (an old link, a typo) shows everything.
+  const filter = wanted && groups.includes(wanted) ? wanted : 'all'
+  const setFilter = (group: string) => (group === 'all' ? replaceRoute('exercises', section) : replaceRoute('exercises', section, group))
   const shown = filter === 'all' ? all : all.filter((e) => groupOf(e) === filter)
   return (
     <>
