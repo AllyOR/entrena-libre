@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { bodyDraft, bodyFromDraft, convertBodyDraft, typedNumber } from './bodyDraft'
+import { bodyDraft, bodyFromDraft, convertBodyDraft, equivalents, typedNumber } from './bodyDraft'
 
 const body = { heightCm: 175, weightKg: 80, waistCm: 86.4, neckCm: 38, hipCm: undefined }
 
@@ -71,5 +71,29 @@ describe('convertBodyDraft', () => {
 
   it('leaves empty fields empty', () => {
     expect(convertBodyDraft(bodyDraft({}, 'metric'), 'metric', 'imperial')).toEqual(bodyDraft({}, 'imperial'))
+  })
+})
+
+describe('equivalents', () => {
+  it('gives each metric field in imperial', () => {
+    const typed = { ...bodyDraft({}, 'metric'), heightCm: '176', weight: '74', waist: '84' }
+    expect(equivalents(typed, 'metric', String)).toEqual({ height: '5 ft 9 in', weight: '163.1 lb', waist: '33.1 in', neck: '', hip: '' })
+  })
+
+  it('gives each imperial field in metric', () => {
+    const typed = { ...bodyDraft({}, 'imperial'), heightFt: '5', heightIn: '9', weight: '180', neck: '15' }
+    expect(equivalents(typed, 'imperial', String)).toEqual({ height: '175.3 cm', weight: '81.6 kg', waist: '', neck: '38.1 cm', hip: '' })
+  })
+
+  it('shows the saved value, not a re-rounded one, for a field that was not edited', () => {
+    const saved = { heightCm: 176, weightKg: 74, waistCm: 84 }
+    const shown = bodyDraft(saved, 'imperial')
+    expect(equivalents(shown, 'imperial', String, saved)).toMatchObject({ height: '176 cm', weight: '74 kg', waist: '84 cm' })
+    expect(equivalents({ ...shown, weight: '170' }, 'imperial', String, saved)).toMatchObject({ height: '176 cm', weight: '77.1 kg' })
+  })
+
+  it('formats numbers with the function it is given, and is empty for unreadable input', () => {
+    const comma = (n: number) => String(n).replace('.', ',')
+    expect(equivalents({ ...bodyDraft({}, 'metric'), weight: '74', waist: 'x' }, 'metric', comma)).toMatchObject({ weight: '163,1 lb', waist: '' })
   })
 })

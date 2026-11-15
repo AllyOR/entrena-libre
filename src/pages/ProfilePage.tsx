@@ -3,7 +3,7 @@ import { RemindersCard } from '../components/RemindersCard'
 import { SELECTABLE_CONDITIONS } from '../data/conditions'
 import { ACTIVITY_KEY, GOAL_KEY, LEVEL_KEY, SECTION_KEY } from '../i18n/labels'
 import { useI18n } from '../i18n/useI18n'
-import { bodyDraft, bodyFromDraft, convertBodyDraft, typedNumber, type BodyDraft } from '../lib/bodyDraft'
+import { bodyDraft, bodyFromDraft, convertBodyDraft, equivalents, typedNumber, type BodyDraft } from '../lib/bodyDraft'
 import { isoDate } from '../lib/dates'
 import { LIMITS, parseProfile, parseState } from '../lib/storage'
 import { LENGTH_UNIT, WEIGHT_UNIT, lengthIn, weightIn, type Units } from '../lib/units'
@@ -35,7 +35,7 @@ type NumberField = 'age' | keyof BodyDraft
 const UNIT_OPTIONS: Units[] = ['metric', 'imperial']
 
 export function ProfilePage() {
-  const { t, l } = useI18n()
+  const { t, l, n } = useI18n()
   const { state, saveProfile, setUnits, replaceAll, reset } = useStore()
   const { units } = state
   const saved = state.profile
@@ -107,7 +107,17 @@ export function ProfilePage() {
   const lengthRange = (key: 'waistCm' | 'neckCm' | 'hipCm') => LIMITS[key].map((cm) => lengthIn(cm, units)) as [number, number]
   const weightRange = LIMITS.weightKg.map((kg) => weightIn(kg, units)) as [number, number]
 
-  const numberInput = (field: NumberField, label: string, [min, max]: readonly [number, number], required: boolean, step = '1') => (
+  /** Each measurement in the other unit system, shown under its field as it is typed. */
+  const also = equivalents(draft, units, n, saved ?? {})
+
+  const numberInput = (
+    field: NumberField,
+    label: string,
+    [min, max]: readonly [number, number],
+    required: boolean,
+    step = '1',
+    equivalent = '',
+  ) => (
     <label>
       <span>
         {label} {!required && <span className="muted small">({t('optional')})</span>}
@@ -122,6 +132,7 @@ export function ProfilePage() {
         value={draft[field]}
         onChange={(e) => set(field, e.target.value)}
       />
+      {equivalent && <span className="equivalent">≈ {equivalent}</span>}
     </label>
   )
 
@@ -159,14 +170,14 @@ export function ProfilePage() {
               {radios('units', UNIT_OPTIONS, units, (o) => t(o === 'metric' ? 'unitsMetric' : 'unitsImperial'), changeUnits)}
             </div>
             {units === 'metric' ? (
-              numberInput('heightCm', t('heightCm', { unit: 'cm' }), LIMITS.heightCm, true, '0.1')
+              numberInput('heightCm', t('heightCm', { unit: 'cm' }), LIMITS.heightCm, true, '0.1', also.height)
             ) : (
               <>
                 {numberInput('heightFt', t('heightFeet'), [3, 7], true)}
-                {numberInput('heightIn', t('heightInches'), [0, 11], false)}
+                {numberInput('heightIn', t('heightInches'), [0, 11], false, '1', also.height)}
               </>
             )}
-            {numberInput('weight', t('weightKg', { unit: weightUnit }), weightRange, true, '0.1')}
+            {numberInput('weight', t('weightKg', { unit: weightUnit }), weightRange, true, '0.1', also.weight)}
           </div>
           <label>
             <span>{t('activity')}</span>
@@ -184,9 +195,9 @@ export function ProfilePage() {
           <legend>{t('measurementsOpt')}</legend>
           <p className="muted small">{t('measurementsHint')}</p>
           <div className="form-grid">
-            {numberInput('waist', t('waistCm', { unit: lengthUnit }), lengthRange('waistCm'), false, '0.1')}
-            {numberInput('neck', t('neckCm', { unit: lengthUnit }), lengthRange('neckCm'), false, '0.1')}
-            {numberInput('hip', t('hipCm', { unit: lengthUnit }), lengthRange('hipCm'), false, '0.1')}
+            {numberInput('waist', t('waistCm', { unit: lengthUnit }), lengthRange('waistCm'), false, '0.1', also.waist)}
+            {numberInput('neck', t('neckCm', { unit: lengthUnit }), lengthRange('neckCm'), false, '0.1', also.neck)}
+            {numberInput('hip', t('hipCm', { unit: lengthUnit }), lengthRange('hipCm'), false, '0.1', also.hip)}
           </div>
         </fieldset>
 

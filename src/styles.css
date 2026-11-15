@@ -1438,3 +1438,11 @@ input[type='time'] {
 .prose {
   max-width: 68ch;
 }
+
+/* A measurement in the other unit system, next to the one typed or shown. */
+.equivalent {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 400;
+  white-space: nowrap;
+}

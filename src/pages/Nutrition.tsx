@@ -16,7 +16,7 @@ import {
   waistToHeight,
   waterLiters,
 } from '../lib/nutrition'
-import { VOLUME_UNIT, WEIGHT_UNIT, volumeIn, weightIn } from '../lib/units'
+import { VOLUME_UNIT, WEIGHT_UNIT, formatWeight, otherUnits, volumeIn, weightIn } from '../lib/units'
 import { href } from '../router'
 import { useStore } from '../state/store'
 import { NeedProfile } from './PlanPage'
@@ -92,7 +92,12 @@ export function Nutrition() {
             <span className="big-number">{n(bodyMass)}</span> <strong>{t(BMI_KEY[bmiCategory(bodyMass)])}</strong>
           </p>
           <BmiScale value={bodyMass} format={n} />
-          <p>{t('healthyRange', { min: n(weightIn(minKg, units)), max: n(weightIn(maxKg, units)), unit: WEIGHT_UNIT[units] })}</p>
+          <p>
+            {t('healthyRange', { min: n(weightIn(minKg, units)), max: n(weightIn(maxKg, units)), unit: WEIGHT_UNIT[units] })}{' '}
+            <span className="equivalent">
+              ≈ {n(weightIn(minKg, otherUnits(units)))}–{formatWeight(maxKg, otherUnits(units), n)}
+            </span>
+          </p>
           <p className="muted small">{t('bmiNote')}</p>
         </section>
 

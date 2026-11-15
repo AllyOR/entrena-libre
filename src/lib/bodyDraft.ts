@@ -5,8 +5,13 @@
 import {
   cmToFeetInches,
   feetInchesToCm,
+  formatHeight,
+  formatLength,
+  formatWeight,
   lengthIn,
   lengthToCm,
+  otherUnits,
+  toKg,
   weightIn,
   weightToKg,
   type Units,
@@ -97,4 +102,33 @@ export function bodyFromDraft(draft: BodyDraft, units: Units, saved: BodyMetric 
 export function convertBodyDraft(draft: BodyDraft, from: Units, to: Units, saved: BodyMetric = {}): BodyDraft {
   if (from === to) return draft
   return bodyDraft(bodyFromDraft(draft, from, saved), to)
+}
+
+export type BodyField = 'height' | 'weight' | 'waist' | 'neck' | 'hip'
+
+/**
+ * What is typed in each field, written in the other unit system: "74" kg reads
+ * "163.1 lb". Both systems are always on screen, whichever one the person types in.
+ * Empty for a field that is empty or not a number.
+ */
+export function equivalents(
+  draft: BodyDraft,
+  units: Units,
+  format: (n: number) => string,
+  saved: BodyMetric = {},
+): Record<BodyField, string> {
+  // As when saving: an unedited field stands for its saved value, not for its rounded text.
+  const body = bodyFromDraft(draft, units, saved)
+  const other = otherUnits(units)
+  const length = (cm: number | undefined) => (cm === undefined ? '' : formatLength(cm, other, format))
+  const typedWeight = typedNumber(draft.weight)
+  const unedited = draft.weight !== '' && draft.weight === bodyDraft(saved, units).weight
+  const weightKg = unedited ? saved.weightKg : typedWeight === undefined ? undefined : toKg(typedWeight, units)
+  return {
+    height: body.heightCm === undefined ? '' : formatHeight(body.heightCm, other, format),
+    weight: weightKg === undefined ? '' : formatWeight(weightKg, other, format),
+    waist: length(body.waistCm),
+    neck: length(body.neckCm),
+    hip: length(body.hipCm),
+  }
 }

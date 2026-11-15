@@ -5,7 +5,18 @@ import { formatDate, formatMonth, isoDate, monthKey } from '../lib/dates'
 import { monthStats, weekStreak } from '../lib/stats'
 import { typedNumber } from '../lib/bodyDraft'
 import { LIMITS } from '../lib/storage'
-import { LENGTH_UNIT, WEIGHT_UNIT, lengthIn, lengthToCm, weightIn, weightToKg } from '../lib/units'
+import {
+  LENGTH_UNIT,
+  WEIGHT_UNIT,
+  formatLength,
+  formatWeight,
+  lengthIn,
+  lengthToCm,
+  otherUnits,
+  toKg,
+  weightIn,
+  weightToKg,
+} from '../lib/units'
 import { useStore } from '../state/store'
 import { NeedProfile } from './PlanPage'
 
@@ -18,6 +29,12 @@ export function Progress() {
   const [date, setDate] = useState(isoDate())
   const [weight, setWeight] = useState('')
   const [waist, setWaist] = useState('')
+  // What is being typed, in the other unit system.
+  const other = otherUnits(units)
+  const typedWeightNow = typedNumber(weight)
+  const typedWaistNow = typedNumber(waist)
+  const weightAlso = typedWeightNow === undefined ? '' : formatWeight(toKg(typedWeightNow, units), other, n)
+  const waistAlso = typedWaistNow === undefined ? '' : formatLength(lengthToCm(typedWaistNow, units), other, n)
 
   if (!profile) {
     return (
@@ -131,6 +148,7 @@ export function Progress() {
               value={weight}
               onChange={(e) => setWeight(e.target.value)}
             />
+            {weightAlso && <span className="equivalent">≈ {weightAlso}</span>}
           </label>
           <label>
             {t('waistCm', { unit: lengthUnit })} <span className="muted small">({t('optional')})</span>
@@ -143,6 +161,7 @@ export function Progress() {
               value={waist}
               onChange={(e) => setWaist(e.target.value)}
             />
+            {waistAlso && <span className="equivalent">≈ {waistAlso}</span>}
           </label>
           <button type="submit" className="btn primary">
             {t('save')}
@@ -168,7 +187,9 @@ export function Progress() {
                   {[...measurements].reverse().map((m) => (
                     <tr key={m.date}>
                       <td>{formatDate(m.date, lang)}</td>
-                      <td>{n(weightIn(m.weightKg, units))}</td>
+                      <td>
+                        {n(weightIn(m.weightKg, units))} <span className="equivalent">≈ {formatWeight(m.weightKg, other, n)}</span>
+                      </td>
                       <td>{m.waistCm ? n(lengthIn(m.waistCm, units)) : '—'}</td>
                       <td>
                         <button type="button" className="btn small" onClick={() => removeMeasurement(m.date)}>
