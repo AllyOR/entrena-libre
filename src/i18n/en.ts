@@ -277,14 +277,19 @@ export const en: Messages = {
   resetConfirm: 'Your profile, plans and measurements will be deleted from this device. Continue?',
 
   remindersTitle: 'Workout reminders',
-  remindersText: 'Get a notification on your phone on the days you choose to train.',
+  remindersText: 'Get a notification on the days you choose to train. When you turn them on, your device will ask for permission to show notifications.',
   remindersEnable: 'Turn on reminders',
   remindersTime: 'Time',
   remindersDays: 'Days',
   remindersOn: 'Reminders scheduled.',
   remindersOff: 'Reminders turned off.',
-  remindersDenied: 'Notifications are blocked. Allow them for this app in your phone settings.',
-  remindersAppOnly: 'Reminders work in the Android and iOS app, not in the browser.',
+  remindersDenied: 'Notifications are blocked. Allow them for this app or site in your device or browser settings.',
+  remindersWebNote:
+    'In a browser the notification arrives only while the app is open or in the background. The Android and iOS app notifies you even when it is closed.',
+  remindersUnsupported:
+    'This browser does not allow notifications. On iPhone, add the app to your home screen (Share → Add to Home Screen) and open it from there.',
+  remindersTest: 'Send a test notification',
+  remindersTestSent: 'Test notification sent. If you do not see it, check the notification permissions on your device.',
   reminderNotice: 'Training day',
   reminderBody: 'Your session is waiting. A few minutes today count.',
 
@@ -299,7 +304,7 @@ export const en: Messages = {
     'Only on your device, in the local storage of the app or the browser. The app has no accounts and no server: it does not send, collect, sell or share your data with anyone, and it uses no analytics or advertising.',
   privacyPermissionsTitle: 'Permissions',
   privacyPermissions:
-    'The Android and iOS app asks for notification permission only if you turn on reminders. They are scheduled on your phone; nothing is sent from a server.',
+    'The app asks for notification permission only if you turn on reminders. They are scheduled on your device; nothing is sent from a server.',
   privacyControlTitle: 'Your control',
   privacyControl:
     'In Profile → Your data you can download a backup, restore it or delete everything. Uninstalling the app or clearing the site data also removes it.',

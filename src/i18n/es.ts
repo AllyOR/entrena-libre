@@ -275,14 +275,19 @@ export const es = {
   resetConfirm: 'Se borrarán tu perfil, tus planes y tus medidas de este dispositivo. ¿Continuar?',
 
   remindersTitle: 'Recordatorios de entrenamiento',
-  remindersText: 'Recibe un aviso en el teléfono los días que eliges entrenar.',
+  remindersText: 'Recibe un aviso los días que eliges entrenar. Al activarlos, tu dispositivo te pedirá permiso para mostrar notificaciones.',
   remindersEnable: 'Activar recordatorios',
   remindersTime: 'Hora',
   remindersDays: 'Días',
   remindersOn: 'Recordatorios programados.',
   remindersOff: 'Recordatorios desactivados.',
-  remindersDenied: 'Las notificaciones están bloqueadas. Actívalas para esta app en los ajustes del teléfono.',
-  remindersAppOnly: 'Los recordatorios funcionan en la app para Android y iOS, no en el navegador.',
+  remindersDenied: 'Las notificaciones están bloqueadas. Permítelas para esta app o este sitio en los ajustes del dispositivo o del navegador.',
+  remindersWebNote:
+    'En el navegador el aviso llega solo si la app está abierta o en segundo plano. La app para Android y iOS avisa aunque esté cerrada.',
+  remindersUnsupported:
+    'Este navegador no permite notificaciones. En iPhone, añade la app a la pantalla de inicio (Compartir → Añadir a pantalla de inicio) y ábrela desde ahí.',
+  remindersTest: 'Enviar aviso de prueba',
+  remindersTestSent: 'Aviso de prueba enviado. Si no lo ves, revisa los permisos de notificaciones del dispositivo.',
   reminderNotice: 'Hoy toca entrenar',
   reminderBody: 'Tu sesión te espera. Unos minutos hoy cuentan.',
 
@@ -297,7 +302,7 @@ export const es = {
     'Solo en tu dispositivo, en el almacenamiento local de la app o del navegador. La app no tiene cuentas ni servidor: no envía, recopila, vende ni comparte tus datos con nadie, y no usa analítica ni publicidad.',
   privacyPermissionsTitle: 'Permisos',
   privacyPermissions:
-    'La app para Android y iOS pide permiso de notificaciones solo si activas los recordatorios. Se programan en tu teléfono; no se envían desde ningún servidor.',
+    'La app pide permiso de notificaciones solo si activas los recordatorios. Se programan en tu dispositivo; no se envían desde ningún servidor.',
   privacyControlTitle: 'Tu control',
   privacyControl:
     'En Perfil → Tus datos puedes descargar una copia, restaurarla o borrarlo todo. Desinstalar la app o borrar los datos del sitio también los elimina.',

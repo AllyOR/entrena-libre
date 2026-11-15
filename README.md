@@ -28,6 +28,9 @@ Web: https://allyor.github.io/entrena-libre/
 Dentro de cada sección los ejercicios se filtran por grupo muscular: piernas, isquiotibiales,
 glúteos, pantorrillas, pecho, espalda, hombros, bíceps, tríceps, antebrazos y core.
 
+El peso, la altura y las medidas se pueden escribir en unidades métricas (kg, cm) o imperiales
+(lb, ft, in); internamente todo se guarda en métrico (`src/lib/units.ts`).
+
 Cada ejercicio trae una figura animada, la técnica paso a paso, los errores comunes, la respiración
 y consejos **para ti**: según tu salud, nivel, edad, estatura y peso (qué modificar, qué hacer en su
 lugar y con qué carga empezar).
@@ -79,8 +82,10 @@ que el contenido de `dist/` funciona igual en Vercel, Netlify o cualquier hostin
 ## Apps para Android e iOS
 
 La misma app web va dentro de una envoltura nativa de [Capacitor](https://capacitorjs.com). En el
-teléfono añade recordatorios de entrenamiento (notificaciones locales), vibración al terminar un
-cronómetro y el color de la barra de estado según el tema.
+teléfono añade recordatorios programados por el sistema (llegan aunque la app esté cerrada),
+vibración al terminar un cronómetro y el color de la barra de estado según el tema. En el navegador
+los recordatorios también piden permiso de notificaciones, pero solo llegan con la app abierta o en
+segundo plano.
 
 ```bash
 npm run build:native   # build web sin service worker + copia a android/ e ios/

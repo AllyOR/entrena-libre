@@ -41,3 +41,20 @@ export function weeklyNotifications(r: Reminders): WeeklyNotification[] {
     .sort((a, b) => a - b)
     .map((d) => ({ id: d + 1, weekday: d + 1, hour, minute }))
 }
+
+/**
+ * When the next reminder is due, strictly after `now`, in local time. Null when
+ * reminders are off. Used by the browser, which has no way to schedule a weekly
+ * notification and must set a timer for the next one.
+ */
+export function nextReminderAt(r: Reminders, now: Date): Date | null {
+  const wanted = weeklyNotifications(r)
+  if (wanted.length === 0) return null
+  const { hour, minute } = wanted[0]
+  const days = new Set(wanted.map((n) => n.weekday - 1))
+  for (let ahead = 0; ahead <= 7; ahead++) {
+    const at = new Date(now.getFullYear(), now.getMonth(), now.getDate() + ahead, hour, minute, 0, 0)
+    if (days.has(at.getDay()) && at.getTime() > now.getTime()) return at
+  }
+  return null
+}
