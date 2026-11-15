@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ExerciseCard } from '../components/ExerciseCard'
 import { CONDITIONS, SELECTABLE_CONDITIONS, conditionById, type Condition } from '../data/conditions'
 import { EXERCISES, exercisesIn } from '../data/exercises'
@@ -15,10 +15,19 @@ const isSection = (v: string | undefined): v is Section => SECTIONS.includes(v a
 export function Library({ section: raw }: { section?: string }) {
   const { t } = useI18n()
   const section: Section = isSection(raw) ? raw : 'gym'
+  const tabs = useRef<HTMLElement>(null)
+
+  // On a phone the tabs scroll sideways: keep the current one in view.
+  useEffect(() => {
+    const strip = tabs.current
+    const current = strip?.querySelector<HTMLElement>('[aria-current="page"]')
+    if (strip && current) strip.scrollLeft = current.offsetLeft - (strip.clientWidth - current.offsetWidth) / 2
+  }, [section])
+
   return (
     <>
       <h1>{t('libraryTitle')}</h1>
-      <nav className="tabs" aria-label={t('sections')}>
+      <nav className="tabs" ref={tabs} aria-label={t('sections')}>
         {SECTIONS.map((s) => (
           <a key={s} href={href('exercises', s)} className="tab" aria-current={s === section ? 'page' : undefined}>
             {t(SECTION_KEY[s])}
