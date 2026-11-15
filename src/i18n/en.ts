@@ -313,4 +313,29 @@ export const en: Messages = {
     'Health information is used only to adapt the exercises on your device. The app gives general guidance and does not replace a health professional.',
   privacyContactTitle: 'Contact',
   privacyContact: 'Privacy questions or requests:',
+
+  premiumHeading: 'Premium',
+  premiumTitle: 'Premium content',
+  premiumPitch: 'Unlock everything with a single payment. No subscription, no recurring charges.',
+  premiumSee: 'See Premium',
+  premiumPilates: 'Pilates section: 16 exercises and their monthly plan',
+  premiumMma: 'Martial arts: 20 drills from kickboxing, jiu-jitsu, taekwondo and karate, and their monthly plan',
+  premiumMenus: 'Suggested daily menus for your calories and your health',
+  premiumRegenerate: 'Change the exercises of your plan as often as you like',
+  premiumBuy: 'Buy Premium',
+  premiumBuyFor: 'Buy Premium for {price}',
+  premiumRestore: 'Restore purchase',
+  premiumOnce: 'One-time payment. If you change phones, use "Restore purchase" with the same store account.',
+  premiumOwned: 'You have Premium',
+  premiumThanks: 'All content is unlocked. Thank you for your purchase!',
+  premiumNothingToRestore: 'We found no earlier purchase on this store account.',
+  premiumUnavailable: 'The purchase is made from the Android or iOS app.',
+  premiumError: 'The purchase could not be completed. You have not been charged; please try again.',
+  premiumFreeNote:
+    'Still free: gym, functional, at home, stretching, exercises adapted to your health, BMI and calories, the monthly plan, guided sessions and progress.',
+  premiumLocked: 'Premium',
+
+  privacyPurchasesTitle: 'Purchases',
+  privacyPurchases:
+    'The Premium purchase in the Android or iOS app is processed by Google Play or the App Store and by the RevenueCat service, which receive an anonymous app identifier and the state of your purchase. They do not receive your profile, your health or your workouts. The website has no purchases.',
 }

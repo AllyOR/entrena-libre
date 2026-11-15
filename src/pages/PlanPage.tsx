@@ -1,11 +1,14 @@
 import { useState } from 'react'
 import { Icon } from '../components/Icon'
+import { Paywall } from '../components/Paywall'
 import { exerciseById } from '../data/exercises'
 import { FOCUS_KEY, GOAL_KEY, KIND_KEY, LEVEL_KEY, SECTION_KEY } from '../i18n/labels'
 import { useI18n } from '../i18n/useI18n'
 import { addMonths, formatMonth, monthKey } from '../lib/dates'
 import { estimateMinutes, planProgress, type MonthPlan, type PlanItem, type Session } from '../lib/plan'
+import { lockedPlace } from '../lib/premium'
 import { href } from '../router'
+import { usePremium } from '../state/premium'
 import { useStore } from '../state/store'
 
 /** "3 × 12 rep." or "3 × 30 s", plus "por lado" for unilateral exercises. */
@@ -89,10 +92,13 @@ function SessionCard({ plan, session, day }: { plan: MonthPlan; session: Session
 export function PlanPage() {
   const { t, lang } = useI18n()
   const { state, createPlan } = useStore()
+  const premium = usePremium()
   const current = monthKey()
   const [month, setMonth] = useState(current)
   const { profile, plans } = state
   const plan = plans[month]
+  // A premium training type, chosen before or restored from a backup, without Premium.
+  const locked = Boolean(profile && lockedPlace(plan?.place ?? profile.place, premium))
 
   const earliest = Object.keys(plans).sort()[0] ?? current
   const canPrev = month > earliest
@@ -123,7 +129,9 @@ export function PlanPage() {
 
       {!profile && <NeedProfile />}
 
-      {profile && !plan && (
+      {locked && <Paywall compact />}
+
+      {profile && !locked && !plan && (
         <section className="card empty">
           <p>{month >= current ? t('noPlanYet', { month: monthName }) : t('noPlanMonth')}</p>
           {month >= current && (
@@ -134,7 +142,7 @@ export function PlanPage() {
         </section>
       )}
 
-      {profile && plan && progress && (
+      {profile && !locked && plan && progress && (
         <>
           <div className="plan-summary">
             <div>
@@ -146,9 +154,15 @@ export function PlanPage() {
               </p>
               <progress value={progress.done} max={progress.total} aria-label={t('sessionsOf', progress)} />
             </div>
-            <button type="button" className="btn" onClick={regenerate}>
-              <Icon name="refresh" size={16} /> {t('regenerate')}
-            </button>
+            {premium.unlocked ? (
+              <button type="button" className="btn" onClick={regenerate}>
+                <Icon name="refresh" size={16} /> {t('regenerate')}
+              </button>
+            ) : (
+              <a className="btn" href={href('premium')}>
+                <Icon name="lock" size={16} /> {t('regenerate')}
+              </a>
+            )}
           </div>
           {stale && <p className="note warn">{t('planStale')}</p>}
           <p className="note muted small">

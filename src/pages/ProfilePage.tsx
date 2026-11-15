@@ -1,13 +1,17 @@
-import { useRef, useState, type ChangeEvent, type FormEvent } from 'react'
+import { useRef, useState, type ChangeEvent, type FormEvent, type ReactNode } from 'react'
+import { Icon } from '../components/Icon'
+import { Paywall } from '../components/Paywall'
 import { RemindersCard } from '../components/RemindersCard'
 import { SELECTABLE_CONDITIONS } from '../data/conditions'
 import { ACTIVITY_KEY, GOAL_KEY, LEVEL_KEY, SECTION_KEY } from '../i18n/labels'
 import { useI18n } from '../i18n/useI18n'
 import { bodyDraft, bodyFromDraft, convertBodyDraft, equivalents, typedNumber, type BodyDraft } from '../lib/bodyDraft'
 import { isoDate } from '../lib/dates'
+import { lockedPlace } from '../lib/premium'
 import { LIMITS, parseProfile, parseState } from '../lib/storage'
 import { LENGTH_UNIT, WEIGHT_UNIT, lengthIn, weightIn, type Units } from '../lib/units'
 import { href, navigate } from '../router'
+import { usePremium } from '../state/premium'
 import { useStore } from '../state/store'
 import type { Activity, ConditionId, Goal, Level, Place, Sex } from '../types'
 
@@ -39,6 +43,7 @@ export function ProfilePage() {
   const { state, saveProfile, setUnits, replaceAll, reset } = useStore()
   const { units } = state
   const saved = state.profile
+  const premium = usePremium()
   const [draft, setDraft] = useState<Draft>({
     name: saved?.name ?? '',
     sex: saved?.sex ?? 'female',
@@ -136,7 +141,7 @@ export function ProfilePage() {
     </label>
   )
 
-  const radios = <T extends string | number>(name: string, options: readonly T[], value: T, label: (o: T) => string, onPick: (o: T) => void) => (
+  const radios = <T extends string | number>(name: string, options: readonly T[], value: T, label: (o: T) => ReactNode, onPick: (o: T) => void) => (
     <div className="segmented">
       {options.map((o) => (
         <label key={o} className={o === value ? 'on' : ''}>
@@ -213,7 +218,23 @@ export function ProfilePage() {
           </div>
           <div className="field">
             <span>{t('place')}</span>
-            {radios('place', PLACES, draft.place, (o) => t(SECTION_KEY[o]), (o) => set('place', o))}
+            {radios(
+              'place',
+              PLACES,
+              draft.place,
+              (o) => (
+                <>
+                  {t(SECTION_KEY[o])}
+                  {lockedPlace(o, premium) && (
+                    <span className="lock" title={t('premiumLocked')}>
+                      <Icon name="lock" size={13} />
+                    </span>
+                  )}
+                </>
+              ),
+              // A premium training type opens the offer instead of being chosen.
+              (o) => (lockedPlace(o, premium) ? navigate('premium') : set('place', o)),
+            )}
           </div>
           <div className="field">
             <span>{t('daysPerWeek')}</span>
@@ -244,6 +265,8 @@ export function ProfilePage() {
           )}
         </div>
       </form>
+
+      {premium.enabled && <Paywall compact />}
 
       <RemindersCard />
 

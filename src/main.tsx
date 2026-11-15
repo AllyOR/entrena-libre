@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { App } from './App'
 import { startUpdates } from './pwa'
+import { PremiumProvider } from './state/PremiumProvider'
 import { StoreProvider } from './state/StoreProvider'
 import './styles.css'
 
@@ -13,7 +14,9 @@ startUpdates()
 createRoot(root).render(
   <StrictMode>
     <StoreProvider>
-      <App />
+      <PremiumProvider>
+        <App />
+      </PremiumProvider>
     </StoreProvider>
   </StrictMode>,
 )

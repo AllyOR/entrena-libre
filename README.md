@@ -115,6 +115,39 @@ Antes de la primera subida a las tiendas:
 Los proyectos nativos se generaron sin Xcode ni Android Studio en la máquina: **no se han compilado
 ni probado en un simulador o un teléfono**. La primera compilación es el paso pendiente.
 
+## Premium (pago único)
+
+Las apps de Android e iOS venden **Premium** con un solo pago, sin suscripción. La web no vende
+nada y está completamente abierta.
+
+| | Incluye |
+|---|---|
+| **Gratis** | Gimnasio, funcional, en casa, estiramientos, ejercicios adaptados, IMC y calorías, plan mensual, sesiones guiadas y progreso. |
+| **Premium** | Pilates y artes marciales (secciones y planes), menús diarios sugeridos y cambiar los ejercicios del plan. |
+
+El reparto está en `src/lib/premium.ts`. Los avisos de contraindicaciones y la sección adaptada son
+gratis a propósito. El bloqueo solo existe en los builds nativos (`npm run build:native`); para
+verlo en el navegador mientras se desarrolla: `VITE_PAYWALL=1 npm run dev`.
+
+Las compras pasan por [RevenueCat](https://www.revenuecat.com) (`src/lib/purchases.ts`). Para que
+funcionen falta, y solo lo puede hacer el dueño de las cuentas:
+
+1. Crear en App Store Connect y en Google Play Console un producto **no consumible** (compra única).
+2. Crear un proyecto en RevenueCat, añadir las dos apps, un *entitlement* llamado `premium` y una
+   *offering* con ese producto como paquete *lifetime*.
+3. Copiar `.env.example` a `.env.native.local` y poner las dos claves públicas del SDK.
+4. En Xcode, añadir la capacidad **In-App Purchase** al target.
+5. Probar con una cuenta de pruebas de cada tienda antes de enviar a revisión.
+
+Que alguien tenga Premium se pregunta a la tienda al abrir la app; no se guarda en los datos ni en
+la copia de seguridad. Sin las claves, la pantalla Premium se muestra pero el botón de compra queda
+desactivado.
+
+**A tener en cuenta:** este repositorio es público y la web es gratuita, así que el contenido
+Premium se puede ver sin pagar en la web y en el código. Si eso importa para el negocio, hay que
+hacer privado el repositorio (y mover la web a un hosting que lo admita gratis, como Vercel o
+Cloudflare Pages) o activar también el bloqueo en la web.
+
 ## Fórmulas
 
 - IMC y categorías: OMS.

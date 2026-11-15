@@ -311,6 +311,31 @@ export const es = {
     'La información de salud se usa únicamente para adaptar los ejercicios en tu dispositivo. La app da orientación general y no sustituye a un profesional de la salud.',
   privacyContactTitle: 'Contacto',
   privacyContact: 'Dudas o solicitudes sobre privacidad:',
+
+  premiumHeading: 'Premium',
+  premiumTitle: 'Contenido Premium',
+  premiumPitch: 'Desbloquea todo con un solo pago. Sin suscripción ni cobros recurrentes.',
+  premiumSee: 'Ver Premium',
+  premiumPilates: 'Sección de Pilates: 16 ejercicios y su plan mensual',
+  premiumMma: 'Artes marciales: 20 técnicas de kickboxing, jiu-jitsu, taekwondo y karate, y su plan mensual',
+  premiumMenus: 'Menús diarios sugeridos según tus calorías y tu salud',
+  premiumRegenerate: 'Cambiar los ejercicios de tu plan las veces que quieras',
+  premiumBuy: 'Comprar Premium',
+  premiumBuyFor: 'Comprar Premium por {price}',
+  premiumRestore: 'Restaurar compra',
+  premiumOnce: 'Pago único. Si cambias de teléfono, usa "Restaurar compra" con la misma cuenta de la tienda.',
+  premiumOwned: 'Tienes Premium',
+  premiumThanks: 'Todo el contenido está desbloqueado. ¡Gracias por tu compra!',
+  premiumNothingToRestore: 'No encontramos una compra anterior en esta cuenta de la tienda.',
+  premiumUnavailable: 'La compra se hace desde la app para Android o iOS.',
+  premiumError: 'No se pudo completar la compra. No se te ha cobrado; inténtalo de nuevo.',
+  premiumFreeNote:
+    'Siguen siendo gratis: gimnasio, funcional, en casa, estiramientos, ejercicios adaptados a tu salud, IMC y calorías, plan mensual, sesiones guiadas y progreso.',
+  premiumLocked: 'Premium',
+
+  privacyPurchasesTitle: 'Compras',
+  privacyPurchases:
+    'La compra de Premium en la app para Android o iOS la procesan Google Play o App Store y el servicio RevenueCat, que reciben un identificador anónimo de la app y el estado de tu compra. No reciben tu perfil, tu salud ni tus entrenamientos. La web no tiene compras.',
 }
 
 export type Messages = typeof es

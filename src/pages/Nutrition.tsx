@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Paywall } from '../components/Paywall'
 import { conditionById } from '../data/conditions'
 import { BMI_KEY, GOAL_KEY, GOAL_NOTE_KEY, MEAL_KEY, TAG_KEY } from '../i18n/labels'
 import { useI18n } from '../i18n/useI18n'
@@ -18,6 +19,7 @@ import {
 } from '../lib/nutrition'
 import { VOLUME_UNIT, WEIGHT_UNIT, formatWeight, otherUnits, volumeIn, weightIn } from '../lib/units'
 import { href } from '../router'
+import { usePremium } from '../state/premium'
 import { useStore } from '../state/store'
 import { NeedProfile } from './PlanPage'
 
@@ -51,6 +53,7 @@ function BmiScale({ value, format }: { value: number; format: (v: number) => str
 export function Nutrition() {
   const { t, l, n } = useI18n()
   const { profile, units } = useStore().state
+  const premium = usePremium()
   const [offset, setOffset] = useState(0)
 
   if (!profile) {
@@ -169,46 +172,55 @@ export function Nutrition() {
         </section>
       </div>
 
-      <div className="section-head">
-        <h2>{t('menuTitle')}</h2>
-        <button type="button" className="btn" onClick={() => setOffset(offset + 1)}>
-          {t('menuOther')}
-        </button>
-      </div>
-      {dietConditions.length > 0 && (
-        <p className="note info small">{t('menuFiltered', { list: dietConditions.map((c) => l(conditionById(c).name)).join(', ') })}</p>
+      {premium.unlocked ? (
+        <>
+          <div className="section-head">
+            <h2>{t('menuTitle')}</h2>
+            <button type="button" className="btn" onClick={() => setOffset(offset + 1)}>
+              {t('menuOther')}
+            </button>
+          </div>
+          {dietConditions.length > 0 && (
+            <p className="note info small">{t('menuFiltered', { list: dietConditions.map((c) => l(conditionById(c).name)).join(', ') })}</p>
+          )}
+          <div className="menu-grid">
+            {menu.map(({ dish, portion, kcal }) => (
+              <section key={dish.id} className="card dish">
+                <p className="muted small">{t(MEAL_KEY[dish.type])}</p>
+                <h3>{l(dish.name)}</h3>
+                <p className="small">{l(dish.detail)}</p>
+                <p className="dish-facts">
+                  <strong>
+                    {n(kcal)} {t('kcal')}
+                  </strong>
+                  <span className="muted small">{t('portion', { n: n(portion) })}</span>
+                </p>
+                <p className="muted small">
+                  {t('protein')} {t('grams', { n: Math.round(dish.protein * portion) })} · {t('carbs')}{' '}
+                  {t('grams', { n: Math.round(dish.carbs * portion) })} · {t('fat')} {t('grams', { n: Math.round(dish.fat * portion) })}
+                </p>
+                {dish.tags.length > 0 && (
+                  <p className="tags">
+                    {dish.tags.map((tag) => (
+                      <span key={tag} className="tag small">
+                        {t(TAG_KEY[tag])}
+                      </span>
+                    ))}
+                  </p>
+                )}
+              </section>
+            ))}
+          </div>
+          <p>
+            <strong>{t('menuTotal', { n: n(menuKcal), target: n(target) })}</strong>
+          </p>
+        </>
+      ) : (
+        <>
+          <h2>{t('menuTitle')}</h2>
+          <Paywall compact />
+        </>
       )}
-      <div className="menu-grid">
-        {menu.map(({ dish, portion, kcal }) => (
-          <section key={dish.id} className="card dish">
-            <p className="muted small">{t(MEAL_KEY[dish.type])}</p>
-            <h3>{l(dish.name)}</h3>
-            <p className="small">{l(dish.detail)}</p>
-            <p className="dish-facts">
-              <strong>
-                {n(kcal)} {t('kcal')}
-              </strong>
-              <span className="muted small">{t('portion', { n: n(portion) })}</span>
-            </p>
-            <p className="muted small">
-              {t('protein')} {t('grams', { n: Math.round(dish.protein * portion) })} · {t('carbs')}{' '}
-              {t('grams', { n: Math.round(dish.carbs * portion) })} · {t('fat')} {t('grams', { n: Math.round(dish.fat * portion) })}
-            </p>
-            {dish.tags.length > 0 && (
-              <p className="tags">
-                {dish.tags.map((tag) => (
-                  <span key={tag} className="tag small">
-                    {t(TAG_KEY[tag])}
-                  </span>
-                ))}
-              </p>
-            )}
-          </section>
-        ))}
-      </div>
-      <p>
-        <strong>{t('menuTotal', { n: n(menuKcal), target: n(target) })}</strong>
-      </p>
       <p className="note muted small">
         {t('formulaNote')} {t('disclaimer')}
       </p>

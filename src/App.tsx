@@ -8,6 +8,7 @@ import { Home } from './pages/Home'
 import { Library } from './pages/Library'
 import { Nutrition } from './pages/Nutrition'
 import { PlanPage } from './pages/PlanPage'
+import { PremiumPage } from './pages/PremiumPage'
 import { Privacy } from './pages/Privacy'
 import { ProfilePage } from './pages/ProfilePage'
 import { Progress } from './pages/Progress'
@@ -48,6 +49,8 @@ function Page({ route }: { route: string[] }) {
       return <ProfilePage />
     case 'privacy':
       return <Privacy />
+    case 'premium':
+      return <PremiumPage />
     default:
       return <Home />
   }

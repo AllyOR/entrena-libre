@@ -1446,3 +1446,39 @@ input[type='time'] {
   font-weight: 400;
   white-space: nowrap;
 }
+
+/* ---------- Premium ---------- */
+.paywall {
+  border-color: var(--accent);
+}
+.paywall h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.paywall.owned {
+  border-color: var(--ok);
+}
+.benefits {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+.benefits li {
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  gap: 10px;
+  align-items: start;
+}
+.benefits svg {
+  margin-top: 4px;
+  color: var(--accent);
+}
+.lock {
+  display: inline-flex;
+  vertical-align: -2px;
+  margin-left: 4px;
+  color: var(--muted);
+}
