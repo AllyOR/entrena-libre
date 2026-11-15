@@ -125,7 +125,11 @@ const BOX: readonly Line[] = [
   [68, 80, 68, FLOOR_Y],
   [98, 80, 98, FLOOR_Y],
 ]
+const WALL_FRONT: Line = [101, -6, 101, FLOOR_Y]
 const SUPINE_KNEES_UP: Angles = [150, 30]
+
+/** A held position: both key frames are the same. */
+const still = (frame: Frame): Pick<PoseDef, 'a' | 'b' | 'hold'> => ({ a: frame, b: frame, hold: true })
 
 const squatDown = (armA: Limb): Frame => ({ anchor: ['ftA', 58, 92], torso: 150, armA, legA: [80, -25] })
 const standing = (armA: Limb, x = 58): Frame => ({ anchor: ['ftA', x, 92], torso: 180, armA, legA: [0, 0] })
@@ -518,4 +522,63 @@ export const POSES: Record<PoseId, PoseDef> = {
     a: { anchor: ['ftA', 44, 92], torso: 178, armA: [30, 150], legA: [15, 5], legB: [-15, -25] },
     b: { anchor: ['ftA', 20, 90], torso: 135, armA: { to: [84, 92], bend: 1 }, legA: [-86, -86] },
   },
+  seatedCalfRaise: {
+    a: { anchor: ['hip', 51, 71], torso: 178, armA: [35, 80], legA: [90, 0] },
+    b: { anchor: ['hip', 51, 71], torso: 178, armA: [38, 78], legA: [98, 0] },
+    scene: CHAIR,
+  },
+  wristCurl: {
+    a: { anchor: ['hip', 51, 71], torso: 172, armA: [35, 98], legA: [90, 0] },
+    b: { anchor: ['hip', 51, 71], torso: 172, armA: [35, 60], legA: [90, 0] },
+    scene: CHAIR,
+  },
+  deadHang: {
+    ...still({ anchor: ['haA', 60, 9], torso: 180, armA: [168, 178], legA: [20, -75] }),
+    scene: [[50, 7, 70, 7]],
+  },
+  legCurl: {
+    a: { anchor: ['hip', 56, 66], torso: -90, armA: [-80, -100], legA: [90, 92] },
+    b: { anchor: ['hip', 56, 66], torso: -90, armA: [-80, -100], legA: [90, 195] },
+    scene: [
+      [16, 70, 84, 70],
+      [24, 70, 24, FLOOR_Y],
+      [76, 70, 76, FLOOR_Y],
+    ],
+  },
+  nordic: {
+    a: { anchor: ['knA', 40, 90], torso: 180, armA: [20, 150], legA: [0, -90] },
+    b: { anchor: ['knA', 40, 90], torso: 142, armA: [70, 110], legA: [-38, -90] },
+  },
+  quadStretch: {
+    // The near limbs do the stretch: bent leg, hand on the foot. The far ones stand and hold the wall.
+    ...still({
+      anchor: ['ftB', 76, 92],
+      torso: 180,
+      armA: { to: [65, 51], bend: 1 },
+      armB: { to: [99, 28], bend: 1 },
+      legA: [-15, -165],
+      legB: [0, 0],
+    }),
+    scene: [WALL_FRONT],
+  },
+  hipFlexorStretch: still({ anchor: ['ftA', 80, 92], torso: 180, armA: [150, 176], legA: [95, 0], legB: [-24, -88] }),
+  calfStretch: {
+    ...still({ anchor: ['ftB', 44, 92], torso: 155, armA: { to: [99, 32], bend: 1 }, legA: [35, -5], legB: [-28, -28] }),
+    scene: [WALL_FRONT],
+  },
+  chestStretch: {
+    ...still({ anchor: ['ftA', 66, 92], torso: 180, armA: [-90, -90], armB: [5, 10], legA: [12, 5], legB: [-10, -20] }),
+    scene: [[35, -6, 35, FLOOR_Y]],
+  },
+  crossArm: still({ anchor: ['hip', 60, 50], torso: 180, armA: [80, 85], armB: [50, 150], legA: [-7, -7], legB: [7, 7] }),
+  // The elbow comes up in front of the forehead, the hand drops behind the head, the other hand presses the elbow.
+  tricepsStretch: still({
+    anchor: ['ftA', 58, 92],
+    torso: 180,
+    armA: [135, -70],
+    armB: { to: [67, 13], bend: 1 },
+    legA: [0, 0],
+  }),
+  wristStretch: still({ anchor: ['ftA', 54, 92], torso: 180, armA: [88, 90], armB: [78, 97], legA: [0, 0] }),
+  sideBend: still({ anchor: ['hip', 58, 50], torso: 163, armA: [150, 138], armB: [12, 6], legA: [-7, -7], legB: [7, 7] }),
 }

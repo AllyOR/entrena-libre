@@ -361,8 +361,8 @@ export const adaptedExercises: Exercise[] = [
   {
     id: 'ada-calf-raise',
     sections: ['adapted'],
-    muscle: 'legs',
-    slot: 'mobility',
+    muscle: 'calves',
+    slot: 'calves',
     level: 1,
     pose: 'calfRaise',
     gear: 'none',
@@ -609,7 +609,7 @@ export const adaptedExercises: Exercise[] = [
   {
     id: 'ada-bottle-carry',
     sections: ['adapted'],
-    muscle: 'arms',
+    muscle: 'forearms',
     slot: 'mobility',
     level: 1,
     pose: 'walk',

@@ -53,6 +53,7 @@ const WEIGHT_FRACTION: Record<Slot, [number, number, number] | null> = {
   pull: [0.3, 0.5, 0.75],
   overhead: [0.2, 0.35, 0.5],
   arms: [0.15, 0.25, 0.35],
+  calves: [0.3, 0.5, 0.8],
   core: [0.1, 0.15, 0.2],
   cardio: null,
   mobility: null,
@@ -83,7 +84,7 @@ export function startingLoadKg(e: Exercise, p: Profile): number | null {
 
 const FLOOR_SUPPORT: PoseId[] = ['pushup', 'kneePushup', 'plank', 'mountainClimber', 'burpee', 'sidePlank', 'plankLegLift', 'cobra', 'sprawl']
 const SEATED_MACHINE: PoseId[] = ['benchPress', 'legPress', 'latPulldown', 'seatedRow']
-const BALANCE: PoseId[] = ['lunge', 'stepUp', 'singleLegStand', 'calfRaise', 'frontKick', 'roundKick', 'kneeStrike']
+const BALANCE: PoseId[] = ['lunge', 'stepUp', 'singleLegStand', 'calfRaise', 'frontKick', 'roundKick', 'kneeStrike', 'quadStretch']
 
 /** What this person should know before doing this exercise, most important first. */
 export function tipsFor(e: Exercise, p: Profile): Tip[] {

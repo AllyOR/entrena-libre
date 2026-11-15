@@ -44,6 +44,7 @@ function SectionList({ section }: { section: Section }) {
   return (
     <>
       {byArt && <p className="note info">{t('mmaNote')}</p>}
+      {section === 'stretch' && <p className="note info">{t('stretchNote')}</p>}
       <div className="chips" role="group" aria-label={t('mAll')}>
         {['all', ...groups].map((group) => (
           <button key={group} type="button" className="chip" aria-pressed={group === filter} onClick={() => setFilter(group)}>

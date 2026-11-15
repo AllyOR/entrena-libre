@@ -18,6 +18,7 @@ const SECTION_ART: Record<Section, { pose: PoseId; gear: Gear }> = {
   adapted: { pose: 'birdDog', gear: 'none' },
   pilates: { pose: 'teaser', gear: 'none' },
   mma: { pose: 'roundKick', gear: 'none' },
+  stretch: { pose: 'hipFlexorStretch', gear: 'none' },
 }
 
 function SectionCards() {
