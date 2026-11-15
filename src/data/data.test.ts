@@ -9,7 +9,7 @@ describe('exercise catalogue', () => {
   it('has unique ids with the section prefix', () => {
     const ids = EXERCISES.map((e) => e.id)
     expect(new Set(ids).size).toBe(ids.length)
-    for (const id of ids) expect(id).toMatch(/^(gym|fun|home|ada)-[a-z0-9-]+$/)
+    for (const id of ids) expect(id).toMatch(/^(gym|fun|home|ada|pil|mma)-[a-z0-9-]+$/)
   })
 
   it.each(EXERCISES.map((e) => [e.id, e] as const))('%s is complete in both languages', (_id, e) => {
@@ -46,6 +46,16 @@ describe('exercise catalogue', () => {
         expect(count(section, slot), `${section}/${slot}`).toBeGreaterThanOrEqual(2)
       }
     }
+  })
+
+  it('names the martial art of every martial-arts drill, and of nothing else', () => {
+    for (const e of EXERCISES) {
+      expect(Boolean(e.discipline), e.id).toBe(e.sections.includes('mma'))
+    }
+    for (const art of ['kickboxing', 'jiujitsu', 'taekwondo', 'karate'] as const) {
+      expect(exercisesIn('mma').filter((e) => e.discipline === art).length, art).toBeGreaterThanOrEqual(4)
+    }
+    expect(exercisesIn('pilates').length).toBeGreaterThanOrEqual(15)
   })
 
   it('has an adapted exercise that helps each condition', () => {

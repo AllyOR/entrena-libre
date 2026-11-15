@@ -1,6 +1,7 @@
 /** Spanish interface strings: the source of truth for the keys. `{name}` marks a variable. */
 export const es = {
-  appName: 'EntrenaLibre',
+  appName: 'Training Seasonny',
+  appShort: 'Seasonny',
   skip: 'Saltar al contenido',
   navHome: 'Hoy',
   navExercises: 'Ejercicios',
@@ -22,10 +23,20 @@ export const es = {
   secFunctional: 'Funcional',
   secHome: 'En casa',
   secAdapted: 'Adaptado',
+  secPilates: 'Pilates',
+  secMma: 'Artes marciales',
   secGymDesc: 'Barras, mancuernas, máquinas y poleas.',
   secFunctionalDesc: 'Peso corporal, pesas rusas, saltos y circuitos.',
   secHomeDesc: 'Con mochila, botellas, silla y pared.',
   secAdaptedDesc: 'Según tu salud, tus articulaciones y tu etapa.',
+  secPilatesDesc: 'Control, core y postura en colchoneta.',
+  secMmaDesc: 'Técnica en solitario de kickboxing, jiu-jitsu, taekwondo y karate.',
+  mmaNote:
+    'Practica despacio, sin contacto y con espacio libre alrededor. Para combatir o entrenar con un compañero necesitas un instructor.',
+  dKickboxing: 'Kickboxing',
+  dJiujitsu: 'Jiu-jitsu',
+  dTaekwondo: 'Taekwondo',
+  dKarate: 'Karate',
 
   mAll: 'Todos',
   mLegs: 'Piernas',
@@ -232,7 +243,7 @@ export const es = {
   actAthlete: 'Muy alta: entrenamiento intenso diario',
   training: 'Entrenamiento',
   goal: 'Objetivo',
-  place: 'Dónde entrenas',
+  place: 'Tipo de entrenamiento',
   daysPerWeek: 'Días por semana',
   health: 'Salud y limitaciones',
   healthHint: 'Marca lo que aplica a ti. Se usa solo para adaptar los ejercicios.',
@@ -245,9 +256,42 @@ export const es = {
   exportData: 'Descargar copia',
   importData: 'Restaurar copia',
   importOk: 'Copia restaurada.',
-  importBad: 'El archivo no es una copia válida de EntrenaLibre.',
+  importBad: 'El archivo no es una copia válida de Training Seasonny.',
   resetData: 'Borrar todo',
   resetConfirm: 'Se borrarán tu perfil, tus planes y tus medidas de este dispositivo. ¿Continuar?',
+
+  remindersTitle: 'Recordatorios de entrenamiento',
+  remindersText: 'Recibe un aviso en el teléfono los días que eliges entrenar.',
+  remindersEnable: 'Activar recordatorios',
+  remindersTime: 'Hora',
+  remindersDays: 'Días',
+  remindersOn: 'Recordatorios programados.',
+  remindersOff: 'Recordatorios desactivados.',
+  remindersDenied: 'Las notificaciones están bloqueadas. Actívalas para esta app en los ajustes del teléfono.',
+  remindersAppOnly: 'Los recordatorios funcionan en la app para Android y iOS, no en el navegador.',
+  reminderNotice: 'Hoy toca entrenar',
+  reminderBody: 'Tu sesión te espera. Unos minutos hoy cuentan.',
+
+  privacyTitle: 'Política de privacidad',
+  privacyLink: 'Política de privacidad',
+  privacyUpdated: 'Última actualización: 15/11/2026.',
+  privacyStoredTitle: 'Qué datos guarda la app',
+  privacyStored:
+    'Tu perfil (nombre opcional, sexo, edad, altura, peso, medidas, objetivo y las condiciones de salud que marques), tus planes, las sesiones completadas, tus registros de peso y tus preferencias de idioma, tema y recordatorios.',
+  privacyWhereTitle: 'Dónde se guardan',
+  privacyWhere:
+    'Solo en tu dispositivo, en el almacenamiento local de la app o del navegador. La app no tiene cuentas ni servidor: no envía, recopila, vende ni comparte tus datos con nadie, y no usa analítica ni publicidad.',
+  privacyPermissionsTitle: 'Permisos',
+  privacyPermissions:
+    'La app para Android y iOS pide permiso de notificaciones solo si activas los recordatorios. Se programan en tu teléfono; no se envían desde ningún servidor.',
+  privacyControlTitle: 'Tu control',
+  privacyControl:
+    'En Perfil → Tus datos puedes descargar una copia, restaurarla o borrarlo todo. Desinstalar la app o borrar los datos del sitio también los elimina.',
+  privacyHealthTitle: 'Salud',
+  privacyHealth:
+    'La información de salud se usa únicamente para adaptar los ejercicios en tu dispositivo. La app da orientación general y no sustituye a un profesional de la salud.',
+  privacyContactTitle: 'Contacto',
+  privacyContact: 'Dudas o solicitudes sobre privacidad:',
 }
 
 export type Messages = typeof es

@@ -1,5 +1,6 @@
 import { createContext, useContext } from 'react'
 import type { Lang, Profile } from '../types'
+import type { Reminders } from '../lib/reminders'
 import type { AppState, Measurement } from '../lib/storage'
 
 export interface Store {
@@ -14,6 +15,7 @@ export interface Store {
   uncompleteSession(month: string, sessionId: string): void
   addMeasurement(m: Measurement): void
   removeMeasurement(date: string): void
+  setReminders(reminders: Reminders): void
   /** Replaces everything with a restored backup. */
   replaceAll(state: AppState): void
   reset(): void

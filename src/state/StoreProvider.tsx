@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { isoDate } from '../lib/dates'
+import { applyStatusBar } from '../lib/native'
 import { estimateMinutes, generatePlan, type MonthPlan, type Session } from '../lib/plan'
 import { STORAGE_KEY, defaultState, parseState, upsertMeasurement, type AppState } from '../lib/storage'
 import type { Lang } from '../types'
@@ -28,6 +29,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     document.documentElement.lang = state.lang
     document.documentElement.dataset.theme = state.theme
+    void applyStatusBar(state.theme)
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
     } catch {
@@ -68,6 +70,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         updatePlan(month, (plan) => mapSession(plan, id, ({ doneAt: _doneAt, minutes: _minutes, ...session }) => session)),
       addMeasurement: (m) => setState((s) => ({ ...s, measurements: upsertMeasurement(s.measurements, m) })),
       removeMeasurement: (date) => setState((s) => ({ ...s, measurements: s.measurements.filter((m) => m.date !== date) })),
+      setReminders: (reminders) => setState((s) => ({ ...s, reminders })),
       replaceAll: (next) => setState(next),
       reset: () => setState((s) => defaultState(s.lang, s.theme)),
     }

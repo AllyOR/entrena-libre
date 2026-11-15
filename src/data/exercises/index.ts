@@ -3,11 +3,15 @@ import { adaptedExercises } from './adapted'
 import { functionalExercises } from './functional'
 import { gymExercises } from './gym'
 import { homeExercises } from './home'
+import { mmaExercises } from './mma'
+import { pilatesExercises } from './pilates'
 
 export const EXERCISES: readonly Exercise[] = [
   ...gymExercises,
   ...functionalExercises,
   ...homeExercises,
+  ...pilatesExercises,
+  ...mmaExercises,
   ...adaptedExercises,
 ]
 

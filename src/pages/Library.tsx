@@ -2,13 +2,13 @@ import { useState } from 'react'
 import { ExerciseCard } from '../components/ExerciseCard'
 import { CONDITIONS, SELECTABLE_CONDITIONS, conditionById, type Condition } from '../data/conditions'
 import { EXERCISES, exercisesIn } from '../data/exercises'
-import { MUSCLE_KEY, SECTIONS, SECTION_DESC_KEY, SECTION_KEY } from '../i18n/labels'
+import { DISCIPLINE_KEY, MUSCLE_KEY, SECTIONS, SECTION_DESC_KEY, SECTION_KEY } from '../i18n/labels'
 import type { MessageKey } from '../i18n/es'
 import { useI18n } from '../i18n/useI18n'
 import { effectiveConditions } from '../lib/nutrition'
 import { href } from '../router'
 import { useStore } from '../state/store'
-import type { ConditionId, Muscle, Section } from '../types'
+import type { ConditionId, Discipline, Exercise, Muscle, Section } from '../types'
 
 const isSection = (v: string | undefined): v is Section => SECTIONS.includes(v as Section)
 
@@ -33,16 +33,21 @@ export function Library({ section: raw }: { section?: string }) {
 
 function SectionList({ section }: { section: Section }) {
   const { t } = useI18n()
-  const [muscle, setMuscle] = useState<Muscle | 'all'>('all')
+  const [filter, setFilter] = useState('all')
   const all = exercisesIn(section)
-  const muscles = [...new Set(all.map((e) => e.muscle))]
-  const shown = muscle === 'all' ? all : all.filter((e) => e.muscle === muscle)
+  // Martial arts are browsed by art; every other section by muscle group.
+  const byArt = section === 'mma'
+  const groupOf = (e: Exercise): string => (byArt ? (e.discipline ?? '') : e.muscle)
+  const label = (group: string) => t(byArt ? DISCIPLINE_KEY[group as Discipline] : MUSCLE_KEY[group as Muscle])
+  const groups = [...new Set(all.map(groupOf))]
+  const shown = filter === 'all' ? all : all.filter((e) => groupOf(e) === filter)
   return (
     <>
+      {byArt && <p className="note info">{t('mmaNote')}</p>}
       <div className="chips" role="group" aria-label={t('mAll')}>
-        {(['all', ...muscles] as const).map((m) => (
-          <button key={m} type="button" className="chip" aria-pressed={m === muscle} onClick={() => setMuscle(m)}>
-            {t(m === 'all' ? 'mAll' : MUSCLE_KEY[m])}
+        {['all', ...groups].map((group) => (
+          <button key={group} type="button" className="chip" aria-pressed={group === filter} onClick={() => setFilter(group)}>
+            {group === 'all' ? t('mAll') : label(group)}
           </button>
         ))}
       </div>

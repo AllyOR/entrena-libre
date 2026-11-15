@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Training Seasonny</string>
+    <string name="title_activity_main">Training Seasonny</string>
+    <string name="package_name">com.trainingseasonny.app</string>
+    <string name="custom_url_scheme">com.trainingseasonny.app</string>
+</resources>
