@@ -13,9 +13,9 @@ Web: https://allyor.github.io/training-app/
 
 | Sección | Contenido |
 |---|---|
-| **Gimnasio** | 34 ejercicios con barra, mancuernas, pesa rusa, máquinas y poleas. |
-| **Funcional** | 31 ejercicios de peso corporal, pesa rusa, saltos y circuitos. |
-| **En casa** | 34 ejercicios con mochila, botellas, silla, pared y toalla. |
+| **Gimnasio** | 48 ejercicios con barra, mancuernas, pesa rusa, máquinas y poleas. |
+| **Funcional** | 37 ejercicios de peso corporal, pesa rusa, saltos y circuitos. |
+| **En casa** | 44 ejercicios con mochila, botellas, silla, pared y toalla. |
 | **Pilates** | 16 ejercicios de colchoneta: el cien, roll-up, puente de hombros, natación, teaser… |
 | **Artes marciales** | 20 técnicas en solitario de kickboxing, jiu-jitsu, taekwondo y karate. |
 | **Estiramientos** | 17 estiramientos, uno o dos por grupo muscular, para después de entrenar. |

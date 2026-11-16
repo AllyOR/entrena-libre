@@ -148,6 +148,17 @@ export const POSE_IDS = [
   'tricepsStretch',
   'wristStretch',
   'sideBend',
+  'preacherCurl',
+  'pushdown',
+  'facePull',
+  'backExtension',
+  'barDip',
+  'cableFly',
+  'abWheel',
+  'woodchop',
+  'hangingKneeRaise',
+  'legExtension',
+  'hypopressive',
 ] as const
 
 export type PoseId = (typeof POSE_IDS)[number]

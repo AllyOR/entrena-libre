@@ -581,4 +581,67 @@ export const POSES: Record<PoseId, PoseDef> = {
   }),
   wristStretch: still({ anchor: ['ftA', 54, 92], torso: 180, armA: [88, 90], armB: [78, 97], legA: [0, 0] }),
   sideBend: still({ anchor: ['hip', 58, 50], torso: 163, armA: [150, 138], armB: [12, 6], legA: [-7, -7], legB: [7, 7] }),
+  preacherCurl: {
+    a: { anchor: ['hip', 51, 71], torso: 168, armA: [50, 50], legA: [90, 0] },
+    b: { anchor: ['hip', 51, 71], torso: 168, armA: [50, 170], legA: [90, 0] },
+    scene: [
+      [40, 75, 61, 75],
+      [50, 75, 50, FLOOR_Y],
+      [62, 55, 82, 71],
+      [74, 65, 74, FLOOR_Y],
+    ],
+  },
+  pushdown: {
+    a: { anchor: ['ftA', 56, 92], torso: 174, armA: [5, 130], legA: [0, 0] },
+    b: { anchor: ['ftA', 56, 92], torso: 174, armA: [5, 10], legA: [0, 0] },
+    bandTo: [74, -12],
+  },
+  facePull: {
+    a: { anchor: ['ftA', 52, 92], torso: 184, armA: [88, 88], legA: [10, 5], legB: [-10, -20] },
+    b: { anchor: ['ftA', 52, 92], torso: 186, armA: [-100, 140], legA: [10, 5], legB: [-10, -20] },
+    bandTo: [114, 18],
+  },
+  backExtension: {
+    a: { anchor: ['ftA', 30, 90], torso: 72, armA: [-150, 60], legA: [-45, -45] },
+    b: { anchor: ['ftA', 30, 90], torso: 135, armA: [-80, 100], legA: [-45, -45] },
+    scene: [
+      [26, FLOOR_Y, 74, FLOOR_Y],
+      [34, FLOOR_Y, 60, 66],
+      [53, 69, 66, 59],
+    ],
+  },
+  barDip: {
+    a: { anchor: ['haA', 60, 51], torso: 165, armA: [10, 0], legA: [-10, -80] },
+    b: { anchor: ['haA', 60, 51], torso: 150, armA: [-50, 40], legA: [-10, -80] },
+    scene: [
+      [48, 53, 74, 53],
+      [52, 53, 52, FLOOR_Y],
+      [70, 53, 70, FLOOR_Y],
+    ],
+  },
+  cableFly: {
+    a: { anchor: ['hip', 60, 50], torso: 180, armA: [-115, -105], armB: [115, 105], legA: [-8, -8], legB: [8, 8] },
+    b: { anchor: ['hip', 60, 50], torso: 180, armA: [-35, 25], armB: [35, -25], legA: [-8, -8], legB: [8, 8] },
+    bandTo: [4, 2],
+  },
+  abWheel: {
+    a: { anchor: ['knA', 34, 90], torso: 100, armA: { to: [64, 88], bend: -1 }, legA: [-5, -90] },
+    b: { anchor: ['knA', 34, 90], torso: 97, armA: { to: [102, 88], bend: -1 }, legA: [-50, -90] },
+  },
+  woodchop: {
+    a: { anchor: ['hip', 60, 50], torso: 188, armA: [-135, -135], legA: [-12, -12], legB: [12, 12] },
+    b: { anchor: ['hip', 60, 50], torso: 172, armA: [38, 38], legA: [-12, -12], legB: [12, 12] },
+    bandTo: [6, 0],
+  },
+  hangingKneeRaise: {
+    a: { anchor: ['haA', 60, 9], torso: 180, armA: [168, 178], legA: [20, -75] },
+    b: { anchor: ['haA', 60, 9], torso: 180, armA: [168, 178], legA: [95, -5] },
+    scene: [[50, 7, 70, 7]],
+  },
+  legExtension: {
+    a: { anchor: ['hip', 51, 71], torso: 186, armA: [25, 70], legA: [90, 0] },
+    b: { anchor: ['hip', 51, 71], torso: 186, armA: [25, 70], legA: [90, 86] },
+    scene: CHAIR,
+  },
+  hypopressive: still({ anchor: ['ftA', 58, 92], torso: 156, armA: { to: [62, 62], bend: 1 }, legA: [12, -8] }),
 }
