@@ -83,8 +83,8 @@ export function startingLoadKg(e: Exercise, p: Profile): number | null {
   return Math.max(step(total * 0.5), 5)
 }
 
-const FLOOR_SUPPORT: PoseId[] = ['pushup', 'kneePushup', 'plank', 'mountainClimber', 'burpee', 'sidePlank', 'plankLegLift', 'cobra', 'sprawl']
-const SEATED_MACHINE: PoseId[] = ['benchPress', 'legPress', 'latPulldown', 'seatedRow']
+const FLOOR_SUPPORT: PoseId[] = ['pushup', 'kneePushup', 'plank', 'mountainClimber', 'burpee', 'sidePlank', 'plankLegLift', 'cobra', 'sprawl', 'abWheel']
+const SEATED_MACHINE: PoseId[] = ['benchPress', 'legPress', 'latPulldown', 'seatedRow', 'legExtension', 'preacherCurl']
 const BALANCE: PoseId[] = ['lunge', 'stepUp', 'singleLegStand', 'calfRaise', 'frontKick', 'roundKick', 'kneeStrike', 'quadStretch']
 
 /** What this person should know before doing this exercise, most important first. */
